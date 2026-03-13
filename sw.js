@@ -7,7 +7,6 @@ const ASSETS = [
   './icons/icon-512x512.png'
 ];
 
-// 설치 시 핵심 리소스 캐싱
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
@@ -15,7 +14,6 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-// 활성화 시 이전 캐시 삭제
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -25,7 +23,6 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// 네트워크 우선, 실패 시 캐시
 self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(event.request)
