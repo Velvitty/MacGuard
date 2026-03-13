@@ -162,6 +162,10 @@ if ('serviceWorker' in navigator) {
     80% { transform: translateX(5px); }
   }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+  @keyframes ledBlink {
+    0%,100% { opacity:1; }
+    50%     { opacity:0.15; }
+  }
 
   /* ═══════════════════════════════════════
      SCROLLBAR
@@ -243,6 +247,16 @@ if ('serviceWorker' in navigator) {
     background: var(--accent); border-color: var(--accent);
     box-shadow: 0 0 14px var(--accent), 0 0 5px var(--accent);
   }
+  .pin-dot.locked {
+    background: rgba(255,255,255,0.10) !important;
+    border-color: rgba(255,255,255,0.13) !important;
+    box-shadow: none !important;
+  }
+  .alert-dot.locked {
+    background: rgba(255,255,255,0.08) !important;
+    border-color: rgba(255,255,255,0.12) !important;
+    box-shadow: none !important;
+  }
 
   .pin-input-wrap { position: relative; margin-bottom: 16px; }
   .pin-input {
@@ -279,6 +293,26 @@ if ('serviceWorker' in navigator) {
   .fail-count { margin-top: 12px; font-family: var(--mono); font-size: 11px; color: var(--text-dim); min-height: 18px; }
   .fail-count.warn { color: var(--warn); }
   .fail-count.danger { color: var(--red); animation: blink 1s infinite; }
+
+  /* ═══════════════════════════════════════
+     PRE-ALARM COUNTDOWN
+     ═══════════════════════════════════════ */
+  #preAlarmCountdown {
+    position: fixed; inset: 0; z-index: 1999;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(240,78,116,0.08);
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    opacity: 0; pointer-events: none;
+    transition: opacity .18s ease;
+  }
+  #preAlarmCountdown.show { opacity: 1; pointer-events: all; }
+  #preAlarmNum {
+    font-family: 'Martian Mono', var(--mono);
+    font-size: 130px; line-height: 1;
+    color: var(--red);
+    text-shadow: 0 0 80px rgba(240,78,116,.9), 0 0 160px rgba(240,78,116,.4);
+    transition: opacity .15s ease, transform .15s ease;
+  }
 
   /* ═══════════════════════════════════════
      ALERT OVERLAY
@@ -1181,6 +1215,11 @@ if ('serviceWorker' in navigator) {
 </div>
 
 <!-- ══════════════ ALERT OVERLAY ══════════════ -->
+<!-- ══════════════ PRE-ALARM COUNTDOWN ══════════════ -->
+<div id="preAlarmCountdown">
+  <div id="preAlarmNum">2</div>
+</div>
+
 <div id="alertOverlay">
   <div class="alert-icon" id="alertIcon">🚨</div>
   <div class="alert-title" id="alertTitle">SECURITY ALERT</div>
@@ -1429,7 +1468,7 @@ if ('serviceWorker' in navigator) {
     <div class="section-header">보안 로그</div>
     <div class="log-container">
       <div class="log-header">
-        <span style="color:var(--accent);">●</span> LIVE LOG
+        <span id="liveLogDot" style="color:var(--accent);">●</span> LIVE LOG
         <span style="margin-left:auto;display:flex;gap:12px;align-items:center;">
         </span>
       </div>
@@ -1515,6 +1554,16 @@ let state = {
   alarmNodes: [],
   alarmStopped: true,
   ttsTimeout: null,
+  alarmScheduleTimer1: null,  // :01 990ms 예고음 타이머
+  alarmScheduleTimer2: null,  // :02 450ms 본 경보 타이머
+  preAlarmActive: false,      // :02/:01 카운트 중 모든 입력 차단 플래그
+  alarmRound: 0,              // 3번 틀린 횟수 (0=첫번째 경보, 1=5초유예, 2+=10초유예)
+  lockoutTimer: null,         // 입력 잠금 타이머
+  alertFailCount: 0,          // 경보창 전용 실패 카운터
+  alertLockoutRound: 0,       // 경보창 전용 라운드
+  lockoutActive: false,       // 유예 중 모든 입력 완전 차단 플래그
+  _alertInputReady: false,    // 경보창 표시 후 110ms 지난 뒤 입력 허용
+  _alertShownAt: 0,           // 경보창이 뜬 시각 (Date.now())
 };
 
 let _lockTick = null; // lockNow interval 핸들 — 중복 방지용
@@ -1561,10 +1610,41 @@ document.addEventListener('keydown', unlockAudio);
 document.addEventListener('touchstart', unlockAudio);
 
 // 카운트다운 중 키보드 완전 차단 (capture 단계)
+function _lockDots(prefix, count, dotClass) {
+  for (let i = 0; i < count; i++) {
+    const d = document.getElementById(prefix + i);
+    if (d) { d.classList.remove('filled'); d.classList.add('locked'); }
+  }
+}
+function _unlockDots(prefix, count) {
+  for (let i = 0; i < count; i++) {
+    const d = document.getElementById(prefix + i);
+    if (d) d.classList.remove('locked');
+  }
+}
+
 function _isCountingDown() {
   var b = document.getElementById('countdownBlocker');
   return b && b.classList.contains('active');
 }
+function _isPreAlarm() { return !!state.preAlarmActive; }
+
+// pre-alarm 카운트 중 모든 이벤트 차단 (숫자키 0-9, Space, Enter 제외)
+['keydown','keyup','keypress','mousedown','mouseup','click','touchstart','touchend','wheel','scroll'].forEach(evt => {
+  document.addEventListener(evt, e => {
+    if (state.lockoutActive) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      return;
+    }    if (!_isPreAlarm()) return;
+    if (evt === 'keydown' || evt === 'keyup' || evt === 'keypress') {
+      const allowed = /^[0-9]$/.test(e.key) || e.key === 'Enter' || e.key === ' ' || /^Numpad[0-9]$/.test(e.code);
+      if (allowed) return;
+    }
+    e.stopImmediatePropagation();
+    e.preventDefault();
+  }, true);
+});
 document.addEventListener('keydown', e => {
   if (_isCountingDown()) { e.stopImmediatePropagation(); e.preventDefault(); }
 }, true);
@@ -1597,6 +1677,12 @@ function playAlarm(stop = false) {
     state.alarmStopped = true;
     if (state.alarmInterval) { clearTimeout(state.alarmInterval); state.alarmInterval = null; }
     if (state.ttsTimeout) { clearTimeout(state.ttsTimeout); state.ttsTimeout = null; }
+    // 예약된 지연 경보 타이머 취소 (:02 카운트 / :01 본 경보)
+    if (state.alarmScheduleTimer1) { clearTimeout(state.alarmScheduleTimer1); state.alarmScheduleTimer1 = null; }
+    if (state.alarmScheduleTimer2) { clearTimeout(state.alarmScheduleTimer2); state.alarmScheduleTimer2 = null; }
+    state.preAlarmActive = false;
+    const _pre = document.getElementById('preAlarmCountdown');
+    if (_pre) _pre.classList.remove('show');
     // mp3 stop handled via alarmNodes
     if (state.alarmNodes) {
       state.alarmNodes.forEach(n => { try { n.stop(); } catch(e) {} });
@@ -1904,6 +1990,11 @@ function tryUnlock() {
     if (footer) footer.style.display = '';
     state.isLocked = false;
     state.failCount = 0;
+    state.alarmRound = 0;
+    state.lockoutActive = false;
+    _unlockDots('dot', 6);
+    if (state.lockoutTimer) { clearInterval(state.lockoutTimer); state.lockoutTimer = null; }
+    pinInput.disabled = false;
     document.getElementById('failCount').textContent = '';
     addLog('success', 'ACCESS', '정상 잠금 해제');
     initCamera();
@@ -1921,10 +2012,49 @@ function tryUnlock() {
     for (let i = 0; i < 6; i++) document.getElementById('dot' + i).classList.remove('filled');
 
     const fc = document.getElementById('failCount');
+
     if (state.failCount >= 3) {
-      fc.className = 'fail-count danger';
-      fc.textContent = `⚠ ${state.failCount}회 오류 — 경보 발동`;
-      triggerSecurityAlert('WRONG_PIN');
+      state.failCount = 0;
+      state.alarmRound++;
+      state.lockoutActive = true;
+      _lockDots('dot', 6, 'pin-dot');
+      pinInput.disabled = true;
+
+      if (state.alarmRound === 1) {
+        // 1회차: 경보 발동 — 경보창이 뜨면 lockoutActive는 경보창이 관리
+        fc.className = 'fail-count danger';
+        fc.textContent = `⚠ 경보 발동`;
+        triggerSecurityAlert('WRONG_PIN');
+        // pre-alarm 카운트 끝나고 경보창 뜨면 잠금화면 입력 차단 해제 (경보창이 이어받음)
+        setTimeout(() => {
+          state.lockoutActive = false;
+          _unlockDots('dot', 6);
+          pinInput.disabled = false;
+        }, 1700); // pre-alarm 1650ms + 여유
+      } else {
+        // 2회차: 5초 / 3회차 이상: 10초 입력 잠금 + 경보 발동
+        const secs = state.alarmRound === 2 ? 3 : 5;
+        triggerSecurityAlert('WRONG_PIN');
+        if (state.lockoutTimer) clearInterval(state.lockoutTimer);
+        let remaining = secs;
+        fc.className = 'fail-count danger';
+        fc.textContent = `입력 잠금 — ${remaining}초 후 해제`;
+        state.lockoutTimer = setInterval(() => {
+          remaining--;
+          if (remaining <= 0) {
+            clearInterval(state.lockoutTimer);
+            state.lockoutTimer = null;
+            pinInput.disabled = false;
+            state.lockoutActive = false;
+            _unlockDots('dot', 6);
+            pinInput.focus();
+            fc.className = 'fail-count warn';
+            fc.textContent = `비밀번호 오류 0회 / 3회`;
+          } else {
+            fc.textContent = `입력 잠금 — ${remaining}초 후 해제`;
+          }
+        }, 1000);
+      }
     } else {
       fc.className = 'fail-count warn';
       fc.textContent = `비밀번호 오류 ${state.failCount}회 / 3회`;
@@ -2220,14 +2350,41 @@ function lockNow() {
 // SECURITY ALERT
 // ─────────────────────────────────────────────
 function triggerSecurityAlert(reason) {
-  // 타이머(카운트다운)가 떠 있는 동안은 경보/알림 완전 차단
-  const overlay = document.getElementById('countdownOverlay');
-  if (_isCountingDown()) return;
+  // 카운트다운 또는 pre-alarm 진행 중엔 완전 차단 (재진입/초기화 방지)
+  if (_isCountingDown() || state.preAlarmActive) return;
+
+  // 즉시 모든 입력 차단 — 이후 로직보다 먼저 플래그 세팅
+  state.preAlarmActive = true;
+
+  // 이미 경보창이 떠 있으면 카운트 없이 내용만 갱신
+  const alreadyShowing = document.getElementById('alertOverlay').classList.contains('show');
+  if (alreadyShowing) {
+    state.alertCount++;
+    localStorage.setItem('mg_alerts', state.alertCount);
+    updateStats();
+    const msgs = {
+      'WRONG_PIN':    { icon:'🚨', title:'비밀번호 오류 경보', sub:`${state.failCount}회 연속 실패 — 침입 시도 감지` },
+      'KEY_ERROR':    { icon:'⌨️', title:'키 입력 오류', sub:'잠금 화면에서 허용되지 않은 키가 입력되었습니다' },
+      'POWER_CHANGE': { icon:'⚡', title:'전원 변경 감지', sub:'충전 케이블 상태가 변경되었습니다' },
+      'RESIZE':       { icon:'📐', title:'화면 크기 변경', sub:'브라우저 크기 변경 감지' },
+      'BLUR':         { icon: EYE_SVG, title:'화면 비활성 감지', sub:'다른 창으로 전환되었습니다' },
+      'NETWORK':      { icon:'📡', title:'네트워크 변경', sub:'와이파이/네트워크 상태 변경 감지' },
+      'CLOSE':        { icon:'🚪', title:'닫기 시도 감지', sub:'잠금 중 브라우저 닫기가 감지되었습니다' },
+      'KIOSK':        { icon:'🖥', title:'전체화면 이탈 감지', sub:'키오스크 모드에서 벗어나려는 시도가 감지되었습니다' },
+      'MOUSE_CLICK':  { icon:'🖱', title:'마우스 입력 감지', sub:'잠금 중 마우스 클릭 또는 스크롤이 감지되었습니다' },
+    };
+    const m = msgs[reason] || { icon:'🔔', title:'보안 경보', sub:'이상 활동 감지' };
+    document.getElementById('alertIcon').innerHTML = m.icon;
+    document.getElementById('alertTitle').textContent = m.title;
+    document.getElementById('alertSub').textContent = m.sub;
+    addLog('danger', 'ALERT', `${m.title} — ${m.sub}`);
+    simulateEmailAlert(m.title);
+    return;
+  }
 
   state.alertCount++;
   localStorage.setItem('mg_alerts', state.alertCount);
   updateStats();
-  // AudioContext resume 보장 (웹 autoplay 정책 대응)
   if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
 
   const msgs = {
@@ -2241,34 +2398,59 @@ function triggerSecurityAlert(reason) {
     'KIOSK':        { icon:'🖥', title:'전체화면 이탈 감지', sub:'키오스크 모드에서 벗어나려는 시도가 감지되었습니다' },
     'MOUSE_CLICK':  { icon:'🖱', title:'마우스 입력 감지', sub:'잠금 중 마우스 클릭 또는 스크롤이 감지되었습니다' },
   };
-
   const m = msgs[reason] || { icon:'🔔', title:'보안 경보', sub:'이상 활동 감지' };
   document.getElementById('alertIcon').innerHTML = m.icon;
   document.getElementById('alertTitle').textContent = m.title;
   document.getElementById('alertSub').textContent = m.sub;
-  const alreadyShowing = document.getElementById('alertOverlay').classList.contains('show');
-  document.getElementById('alertOverlay').classList.add('show');
+  addLog('danger', 'ALERT', `${m.title} — ${m.sub}`);
+  simulateEmailAlert(m.title);
 
-  // 이미 경보창이 떠 있으면 도트 단계 유지 (입력 흐름 방해 안 함)
-  if (!alreadyShowing) {
+  // ── Pre-alarm countdown: :02 (450ms) → :01 (990ms) → 경보 ──
+  const preEl  = document.getElementById('preAlarmCountdown');
+  const numEl  = document.getElementById('preAlarmNum');
+
+  // 이전 예약 타이머 취소
+  if (state.alarmScheduleTimer1) { clearTimeout(state.alarmScheduleTimer1); state.alarmScheduleTimer1 = null; }
+  if (state.alarmScheduleTimer2) { clearTimeout(state.alarmScheduleTimer2); state.alarmScheduleTimer2 = null; }
+
+  // :02 표시
+  numEl.textContent = ':02';
+  numEl.style.opacity = '1';
+  numEl.style.transform = 'scale(1)';
+  preEl.classList.add('show');
+  playTick(false);
+
+  // 450ms 후: :02→:01 전환
+  state.alarmScheduleTimer1 = setTimeout(() => {
+    numEl.style.opacity = '0';
+    numEl.style.transform = 'scale(1.15)';
+    setTimeout(() => {
+      numEl.textContent = ':01';
+      numEl.style.transform = 'scale(0.85)';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        numEl.style.opacity = '1';
+        numEl.style.transform = 'scale(1)';
+      }));
+      playTick(false);
+    }, 120);
+  }, 670);
+
+  // 990ms 후: 경보 오버레이 표시 + 경보음 시작
+  state.alarmScheduleTimer2 = setTimeout(() => {
+    state.preAlarmActive = false;
+    preEl.classList.remove('show');
     document.getElementById('alertPinWrap').style.display = 'none';
     document.getElementById('alertDismissBtn').style.display = '';
     document.getElementById('alertPinInput').value = '';
     for (let i = 0; i < 6; i++) document.getElementById('adot' + i).classList.remove('filled');
     document.getElementById('alertPinError').textContent = '';
-  }
+    document.getElementById('alertOverlay').classList.add('show');
+    state._alertShownAt = Date.now();
 
-  // resume 완료 후 재생 (Promise 방식)
-  const _ctx = getAudioCtx();
-  const _play = () => playAlarm();
-  if (_ctx.state === 'suspended') {
-    _ctx.resume().then(_play);
-  } else {
-    _play();
-  }
-
-  addLog('danger', 'ALERT', `${m.title} — ${m.sub}`);
-  simulateEmailAlert(m.title);
+    const _ctx = getAudioCtx();
+    const _play = () => playAlarm();
+    if (_ctx.state === 'suspended') { _ctx.resume().then(_play); } else { _play(); }
+  }, 1650);
 }
 
 function showAlertPin() {
@@ -2303,17 +2485,61 @@ function dismissAlert() {
     input.value = '';
     for (let i = 0; i < 6; i++) document.getElementById('adot' + i).classList.remove('filled');
     document.getElementById('alertPinError').textContent = '';
+    state.failCount = 0;
+    state.alarmRound = 0;
+    state.alertFailCount = 0;
+    state.alertLockoutRound = 0;
+    state.lockoutActive = false;
+    state._alertShownAt = 0;
+    _unlockDots('adot', 6);
+    if (state.lockoutTimer) { clearInterval(state.lockoutTimer); state.lockoutTimer = null; }
+    input.disabled = false;
     addLog('success', 'DISMISS', '경보 해제됨');
   } else {
+    state.alertFailCount++;
+
     const dots = document.getElementById('alertPinDots');
     dots.classList.add('shake');
     input.value = '';
     for (let i = 0; i < 6; i++) document.getElementById('adot' + i).classList.remove('filled');
     setTimeout(() => dots.classList.remove('shake'), 400);
-    document.getElementById('alertPinError').textContent = '비밀번호가 틀렸습니다';
     playWrongPin();
     addLog('warn', 'DISMISS', '경보 해제 실패 — 비밀번호 오류');
-    input.focus();
+
+    const alertErr = document.getElementById('alertPinError');
+
+    if (state.alertFailCount >= 3) {
+      state.alertFailCount = 0;
+      state.alertLockoutRound++;
+
+      const secs = state.alertLockoutRound === 1 ? 3 : 5;
+
+      if (secs > 0) {
+        input.disabled = true;
+        state.lockoutActive = true;
+        _lockDots('adot', 6, 'alert-dot');
+        if (state.lockoutTimer) clearInterval(state.lockoutTimer);
+        let remaining = secs;
+        alertErr.textContent = `입력 잠금 — ${remaining}초 후 해제`;
+        state.lockoutTimer = setInterval(() => {
+          remaining--;
+          if (remaining <= 0) {
+            clearInterval(state.lockoutTimer);
+            state.lockoutTimer = null;
+            input.disabled = false;
+            state.lockoutActive = false;
+            _unlockDots('adot', 6);
+            input.focus();
+            alertErr.textContent = '';
+          } else {
+            alertErr.textContent = `입력 잠금 — ${remaining}초 후 해제`;
+          }
+        }, 1000);
+      }
+    } else {
+      alertErr.textContent = `비밀번호가 틀렸습니다 (${state.alertFailCount}/3)`;
+      input.focus();
+    }
   }
 }
 
@@ -2883,6 +3109,23 @@ function changePassword() {
 
   // 모달 내 어디서든 키 입력 시 활성 필드로 자동 포커스
   document.getElementById('pwChangeModal')?.addEventListener('keydown', e => {
+    // 백스페이스: pmCf → pmNew → pmCur 순으로 역방향 삭제
+    if (e.key === 'Backspace') {
+      const cf  = document.getElementById('pmCf');
+      const nw  = document.getElementById('pmNew');
+      const cur = document.getElementById('pmCur');
+      if (cf.value.length > 0) {
+        e.preventDefault(); playKeyClick();
+        cf.value = cf.value.slice(0, -1); updatePwDots('pmCf','pmCFD'); cf.focus(); return;
+      } else if (nw.value.length > 0) {
+        e.preventDefault(); playKeyClick();
+        nw.value = nw.value.slice(0, -1); updatePwDots('pmNew','pmND'); nw.focus(); return;
+      } else if (cur.value.length > 0) {
+        e.preventDefault(); playKeyClick();
+        cur.value = cur.value.slice(0, -1); updatePwDots('pmCur','pmCD'); cur.focus(); return;
+      }
+      return;
+    }
     if (['Tab','Shift','Meta','Control','Alt'].includes(e.key)) return;
     const cur = document.getElementById('pmCur');
     const nw  = document.getElementById('pmNew');
@@ -3089,6 +3332,24 @@ function startApp(e) {
 }
 
 init();
+
+// LIVE LOG LED — 사인파 기반 자연스러운 점멸
+(function() {
+  const dot = document.getElementById('liveLogDot');
+  if (!dot) return;
+  const period = 2000; // 2초 주기
+  function tick(ts) {
+    const t = (ts % period) / period;
+    const v = 0.5 + 0.5 * Math.sin(2 * Math.PI * t - Math.PI / 2);
+    const opacity = 0.12 + 0.88 * v;
+    const blur = 2 + 8 * v;
+    const spread = 1 + 6 * v;
+    dot.style.opacity = opacity;
+    dot.style.textShadow = `0 0 ${blur}px rgba(45,244,200,${0.4 + 0.6 * v}), 0 0 ${spread}px rgba(45,244,200,${0.2 + 0.5 * v})`;
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
 
 
 function resetApp() {
