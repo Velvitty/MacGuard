@@ -1,12 +1,13 @@
 {
   "name": "MacGuard — Anti-Theft System",
   "short_name": "MacGuard",
-  "description": "MacGuard 도난 방지 시스템",
+  "description": "맥북 도난방지 보안 시스템",
   "start_url": "./index.html",
-  "display": "fullscreen",
-  "orientation": "portrait-primary",
-  "background_color": "#04060f",
-  "theme_color": "#04060f",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
   "icons": [
     {
       "src": "icons/icon-192x192.png",
@@ -20,6 +21,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "categories": ["security", "utilities"]
+  ]
 }
