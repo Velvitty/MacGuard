@@ -1,3 +1,5 @@
+한국어&emsp;&emsp;[English](README.en.md)
+
 # MacGuard
 
 브라우저에서 PIN 잠금 화면을 표시하고, 입력·탭 전환·네트워크·충전 상태 변화 등에 반응해 경보와 기록을 남기는 웹 앱입니다. 카메라 촬영과 위치 표시, PWA용 설정을 포함합니다.
@@ -220,3 +222,4 @@ Manifest는 시작 경로 `./index.html`, 범위 `.`, 표시 모드 `standalone`
 ## 사용권
 
 앱에 Copyright © 2026 Velvitty(연. Yeon.). All rights reserved.가 표시되어 있습니다. 별도 `LICENSE` 파일은 없으므로 재배포·상업적 이용 등 추가 사용 범위는 저장소 소유자에게 확인하세요.
+
