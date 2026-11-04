@@ -1,6 +1,6 @@
 /* Project-local PWA cache. Offline launches display a connection notice. */
 'use strict';
-const VERSION = "873151d23fccb99b";
+const VERSION = "e358aecd6c28d865";
 const APP = "MacGuard";
 const CORE = ["./manifest.json", "./pwa.js", "./offline.html", "./pwa-icon-192.png", "./pwa-icon-512.png", "./pwa-icon-maskable.png", "./apple-touch-icon.png", "./icons/icon-192x192.png", "./icons/icon-512x512.png"];
 const OPTIONAL = [];
