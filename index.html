@@ -3,22 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MacGuard">
 <meta name="theme-color" content="#0a0a0f">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/icon-512x512.png">
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('SW registered:', reg.scope))
-      .catch(err => console.log('SW registration failed:', err));
-  });
-}
-</script>
 <title>MacGuard — Anti-Theft System</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -950,6 +936,14 @@ if ('serviceWorker' in navigator) {
   .pin-setup-confirm-btn:not(:disabled):hover { background: var(--glass-3); border-color: rgba(45,244,200,.48); box-shadow: var(--shine), var(--glow-teal); }
   .pin-setup-confirm-btn:disabled { opacity: .25; cursor: not-allowed; }
 </style>
+<!-- Velvitty PWA -->
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="./pwa.js" defer></script>
+<!-- /Velvitty PWA -->
 </head>
 <body>
 
