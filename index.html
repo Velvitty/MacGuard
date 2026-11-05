@@ -4,6 +4,1506 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Velvitty launch screen -->
+<!-- Velvitty UI snapshot -->
+<template id="velvitty-ui-fallback">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;&lt;base href=&quot;./&quot;&gt;&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;none&#x27;; connect-src &#x27;none&#x27;; style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27; https:; img-src &#x27;self&#x27; data: https:; font-src &#x27;self&#x27; data: https:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; form-action &#x27;none&#x27;; base-uri &#x27;self&#x27;&quot;&gt;&lt;style&gt;html{pointer-events:none!important}*{animation-play-state:paused!important;caret-color:transparent!important}&lt;/style&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+
+
+&lt;meta name=&quot;apple-mobile-web-app-title&quot; content=&quot;MacGuard&quot;&gt;
+&lt;meta name=&quot;theme-color&quot; content=&quot;#0a0a0f&quot;&gt;
+&lt;title&gt;MacGuard — Anti-Theft System&lt;/title&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&amp;amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Martian+Mono:wght@800&amp;amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+  @import url(&#x27;https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&amp;display=swap&#x27;);
+
+  /* ═══════════════════════════════════════
+     GLASS TOKEN SYSTEM
+     ═══════════════════════════════════════ */
+  :root {
+    /* Foundations */
+    --bg: #04060f;
+
+    /* Glass layers — bright → translucent over dark BG */
+    --glass-0: rgba(255,255,255,0.038);
+    --glass-1: rgba(255,255,255,0.060);
+    --glass-2: rgba(255,255,255,0.090);
+    --glass-3: rgba(255,255,255,0.120);
+    --glass-4: rgba(255,255,255,0.160);
+
+    /* Aliases used in components */
+    --glass:  var(--glass-1);
+    --glass2: var(--glass-2);
+    --glass3: var(--glass-3);
+    --surface:  var(--glass-1);
+    --surface2: var(--glass-2);
+
+    /* Borders */
+    --glass-border:  rgba(255,255,255,0.09);
+    --glass-border2: rgba(255,255,255,0.16);
+    --glass-shine:   rgba(255,255,255,0.20);
+    --border: var(--glass-border);
+
+    /* Accent palette */
+    --accent:  #2df4c8;   /* teal-mint */
+    --accent2: #f04e74;   /* rose */
+    --accent3: #818cf8;   /* indigo */
+    --accent4: #f9b431;   /* amber */
+    --warn:    #f9b431;
+    --red:     #f04e74;
+    --green:   #2df4c8;
+
+    /* Text */
+    --text:     #eef0fa;
+    --text-dim: rgba(200,205,240,0.42);
+
+    /* Typography */
+    --sans: &#x27;Syne&#x27;, system-ui, sans-serif;
+    --mono: &#x27;DM Mono&#x27;, &#x27;IBM Plex Mono&#x27;, monospace;
+
+    /* Geometry */
+    --radius:    24px;
+    --radius-sm: 18px;
+    --radius-xs: 13px;
+
+    /* Filters */
+    --blur:    blur(32px) saturate(200%) brightness(1.05);
+    --blur-sm: blur(18px) saturate(180%);
+    --blur-xs: blur(10px) saturate(160%);
+
+    /* Shadows &amp; glows */
+    --shadow:    0 8px 32px rgba(0,0,0,0.50), 0 2px 8px rgba(0,0,0,0.35);
+    --shadow-lg: 0 24px 64px rgba(0,0,0,0.65), 0 8px 24px rgba(0,0,0,0.45);
+    --glow-teal:   0 0 32px rgba(45,244,200,0.20);
+    --glow-rose:   0 0 32px rgba(240,78,116,0.22);
+    --glow-indigo: 0 0 32px rgba(129,140,248,0.22);
+
+    /* Inner edge highlight (top-left catch light) */
+    --shine: inset 0 1px 0 rgba(255,255,255,0.18),
+             inset 1px 0 0 rgba(255,255,255,0.07);
+  }
+
+  /* ═══════════════════════════════════════
+     GLOBAL BASE
+     ═══════════════════════════════════════ */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 75% 60% at 12% 10%, rgba(45,244,200,0.14) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 88% 85%, rgba(129,140,248,0.17) 0%, transparent 52%),
+      radial-gradient(ellipse 55% 65% at 50% 50%, rgba(240,78,116,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 85% 40% at 75% 5%,  rgba(249,180,49,0.06) 0%, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+    user-select: none;
+  }
+
+  /* Noise grain */
+  body::after {
+    content: &#x27;&#x27;;
+    position: fixed; inset: 0;
+    background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox=&#x27;0 0 200 200&#x27; xmlns=&#x27;http://www.w3.org/2000/svg&#x27;%3E%3Cfilter id=&#x27;n&#x27;%3E%3CfeTurbulence type=&#x27;fractalNoise&#x27; baseFrequency=&#x27;0.85&#x27; numOctaves=&#x27;4&#x27; stitchTiles=&#x27;stitch&#x27;/%3E%3C/filter%3E%3Crect width=&#x27;100%25&#x27; height=&#x27;100%25&#x27; filter=&#x27;url(%23n)&#x27; opacity=&#x27;0.035&#x27;/%3E%3C/svg%3E&quot;);
+    pointer-events: none; z-index: 9998; opacity: 0.6;
+  }
+
+  /* Vignette */
+  body::before {
+    content: &#x27;&#x27;;
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 58%, rgba(0,0,0,0.55) 100%);
+    pointer-events: none; z-index: 9999;
+  }
+
+  *:focus, *:focus-visible, *:focus-within { outline: none !important; box-shadow: none !important; }
+  #lockScreen *:focus, #lockScreen *:focus-visible,
+  #alertOverlay *:focus, #alertOverlay *:focus-visible { outline: none !important; box-shadow: none !important; border-color: transparent !important; }
+
+  #lockScreen, #lockScreen *,
+  #alertOverlay, #alertOverlay * { cursor: none !important; }
+  body.cursor-locked, body.cursor-locked * { cursor: none !important; }
+
+  button, label { user-select: none; }
+
+  /* ═══════════════════════════════════════
+     COUNTDOWN BLOCKER
+     ═══════════════════════════════════════ */
+  #countdownBlocker {
+    display: none; position: fixed; inset: 0; z-index: 7999; cursor: none;
+  }
+  #countdownBlocker.active { display: block; }
+
+  /* ═══════════════════════════════════════
+     SHARED TRANSITIONS
+     ═══════════════════════════════════════ */
+  #introScreen, #lockScreen, #dashboard { transition: opacity .4s ease; }
+  .screen-hiding { opacity: 0 !important; pointer-events: none !important; transition: opacity .35s ease !important; }
+  .screen-showing { opacity: 0; animation: fadeInScreen .45s ease forwards; }
+  @keyframes fadeInScreen { from { opacity: 0; } to { opacity: 1; } }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ═══════════════════════════════════════
+     SCROLLBAR
+     ═══════════════════════════════════════ */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+  /* ═══════════════════════════════════════
+     LOCK SCREEN
+     ═══════════════════════════════════════ */
+  #lockScreen {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 75% 60% at 12% 10%, rgba(45,244,200,0.14) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 88% 85%, rgba(129,140,248,0.17) 0%, transparent 52%),
+      radial-gradient(ellipse 55% 65% at 50% 50%, rgba(240,78,116,0.07) 0%, transparent 60%);
+    flex-direction: column; align-items: center; justify-content: flex-start;
+    z-index: 150;
+  }
+
+  .lock-content {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; width: 100%;
+  }
+
+  .lock-logo {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .42em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 10px; opacity: .55;
+  }
+  .lock-title {
+    font-family: var(--sans); font-size: 48px; font-weight: 800;
+    letter-spacing: -.03em; color: #fff; margin-bottom: 8px;
+  }
+  .lock-sub {
+    font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+    letter-spacing: .22em; margin-bottom: 52px;
+  }
+
+  .lock-ring {
+    width: 92px; height: 92px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 44px; position: relative;
+    background: var(--glass-1);
+    backdrop-filter: var(--blur-xs); -webkit-backdrop-filter: var(--blur-xs);
+    box-shadow: var(--shine), var(--shadow);
+    animation: ringPulse 4s ease-in-out infinite;
+  }
+  .lock-ring::before {
+    content: &#x27;&#x27;; position: absolute; inset: -12px; border-radius: 50%;
+    border: 1px solid var(--accent); opacity: .10;
+    animation: ringPulse 4s ease-in-out infinite reverse;
+  }
+  .lock-ring::after {
+    content: &#x27;&#x27;; position: absolute; inset: -24px; border-radius: 50%;
+    border: 1px solid var(--accent); opacity: .04;
+  }
+  .lock-icon { width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; color: var(--accent); filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 60%, transparent)); }
+
+  @keyframes ringPulse {
+    0%,100% { border-color: rgba(255,255,255,.07); box-shadow: var(--shine), 0 0 0 rgba(45,244,200,0); }
+    50%      { border-color: rgba(45,244,200,.22);  box-shadow: var(--shine), var(--glow-teal); }
+  }
+
+  .pin-display { display: flex; gap: 12px; margin-bottom: 24px; outline: none !important; }
+  #pinDisplay, #alertPinDots { outline: none !important; box-shadow: none !important; }
+
+  .pin-dot {
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.04);
+    transition: all .2s cubic-bezier(.4,0,.2,1);
+  }
+  .pin-dot.filled {
+    background: var(--accent); border-color: var(--accent);
+    box-shadow: 0 0 14px var(--accent), 0 0 5px var(--accent);
+  }
+
+  .pin-input-wrap { position: relative; margin-bottom: 16px; }
+  .pin-input {
+    background: var(--glass-1); backdrop-filter: var(--blur-sm); -webkit-backdrop-filter: var(--blur-sm);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-sm);
+    color: var(--text); font-family: var(--mono); font-size: 18px;
+    letter-spacing: .3em; padding: 14px 14px 14px 24px;
+    width: 240px; text-align: center; outline: none;
+    box-shadow: var(--shine), var(--shadow); transition: border-color .2s;
+  }
+  .pin-input:focus { border-color: transparent; outline: none !important; }
+  .pin-input.shake, .config-input.shake, #pinDisplay.shake { animation: shake .4s ease; }
+  .pin-input.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(240,78,116,.15), var(--shine); animation: shake .4s ease; }
+
+  .unlock-btn {
+    background: var(--glass-2); backdrop-filter: var(--blur-sm); -webkit-backdrop-filter: var(--blur-sm);
+    color: var(--accent); border: 1px solid rgba(45,244,200,.18); border-radius: 100px;
+    font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: .12em;
+    padding: 13px 40px; width: 240px;
+    box-shadow: var(--shine), var(--shadow); transition: all .25s;
+  }
+  .unlock-btn:hover {
+    background: var(--glass-3); border-color: rgba(45,244,200,.38);
+    box-shadow: var(--shine), var(--glow-teal), var(--shadow); transform: translateY(-2px);
+  }
+  .unlock-btn:active { transform: translateY(0); }
+
+  .setup-link {
+    margin-top: 20px; font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .setup-link:hover { color: var(--accent3); }
+
+  .fail-count { margin-top: 12px; font-family: var(--mono); font-size: 11px; color: var(--text-dim); min-height: 18px; }
+  .fail-count.warn { color: var(--warn); }
+  .fail-count.danger { color: var(--red); animation: blink 1s infinite; }
+
+  /* ═══════════════════════════════════════
+     ALERT OVERLAY
+     ═══════════════════════════════════════ */
+  #alertOverlay {
+    position: fixed; inset: 0;
+    background: rgba(240,78,116,.06);
+    border: 2px solid rgba(240,78,116,.4);
+    z-index: 2000;
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    backdrop-filter: blur(6px) saturate(180%);
+    animation: alertFlash .6s ease infinite alternate;
+    opacity: 0; pointer-events: none; transition: opacity .3s ease;
+  }
+  #alertOverlay.show { opacity: 1; pointer-events: all; }
+
+  @keyframes alertFlash {
+    from { background: rgba(240,78,116,.04); border-color: rgba(240,78,116,.25); }
+    to   { background: rgba(240,78,116,.12); border-color: rgba(240,78,116,.65); }
+  }
+
+  .alert-icon { font-size: 64px; margin-bottom: 16px; animation: alertBounce .6s ease infinite alternate; }
+  @keyframes alertBounce { from { transform: scale(1); } to { transform: scale(1.08); } }
+
+  .alert-title { font-family: var(--sans); font-size: 34px; font-weight: 800; color: var(--red); letter-spacing: -.02em; margin-bottom: 8px; }
+  .alert-sub { font-family: var(--mono); font-size: 13px; color: rgba(255,255,255,.55); margin-bottom: 32px; }
+  .alert-dismiss {
+    background: transparent; border: 2px solid rgba(240,78,116,.5);
+    color: var(--red); font-family: var(--mono); font-size: 12px;
+    padding: 10px 28px; border-radius: 4px; letter-spacing: .1em;
+    transition: none; pointer-events: none;
+  }
+
+  .alert-pin-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .alert-pin-dots { display: flex; gap: 10px; }
+  .alert-dot {
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 2px solid rgba(240,78,116,.45); transition: all .15s;
+  }
+  .alert-dot.filled { background: var(--red); border-color: var(--red); box-shadow: 0 0 10px var(--red); }
+
+  #alertPinInput {
+    background: rgba(0,0,0,.45); border: 1px solid rgba(240,78,116,.35);
+    border-radius: var(--radius-xs); color: #fff;
+    font-family: var(--mono); font-size: 20px; letter-spacing: .3em;
+    padding: 12px 16px 12px 26px; width: 260px; text-align: center; outline: none;
+    transition: border-color .2s;
+  }
+  #alertPinInput:focus { border-color: transparent; outline: none !important; }
+  #alertPinInput.shake, #alertPinDots.shake { animation: shake .4s ease; }
+  .alert-pin-error { font-family: var(--mono); font-size: 12px; color: rgba(255,110,120,.9); min-height: 18px; letter-spacing: .05em; }
+
+  /* ═══════════════════════════════════════
+     DASHBOARD
+     ═══════════════════════════════════════ */
+  #dashboard { display: none; min-height: 100vh; padding: 0; transition: opacity .75s ease; }
+  #dashboard.show { display: block; }
+  #dashboard.screen-hiding { opacity: 0 !important; pointer-events: none !important; }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    border-bottom: 1px solid var(--glass-border);
+    background: rgba(4,6,15,0.58);
+    backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    position: fixed; top: 0; left: 0; right: 0; z-index: 99000;
+    padding: 0 24px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 4px 32px rgba(0,0,0,0.35);
+  }
+
+  #topbarLockBtn, #topbarPill { transition: opacity .35s ease; }
+  #topbarLockBtn.tb-hiding, #topbarPill.tb-hiding { opacity: 0; pointer-events: none; }
+
+  .topbar-inner {
+    max-width: 860px; margin: 0 auto; width: 100%;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 0; position: relative;
+  }
+
+  .lock-now-btn-wrap { position: absolute; left: 50%; transform: translateX(-50%); }
+
+  .topbar-logo { font-family: var(--sans); font-size: 17px; font-weight: 700; letter-spacing: -.015em; }
+  .topbar-logo span { color: var(--accent); }
+
+  /* Status pill */
+  .status-pill {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--mono); font-size: 10.5px; padding: 5px 15px; border-radius: 100px;
+    background: var(--glass-1); backdrop-filter: var(--blur-xs); -webkit-backdrop-filter: var(--blur-xs);
+    border: 1px solid var(--glass-border); color: var(--accent);
+    width: 130px; box-sizing: border-box; white-space: nowrap;
+    box-shadow: var(--shine);
+    transition: background .4s ease, border-color .4s ease, color .4s ease;
+  }
+  .status-pill .status-dot, #topbarPillText { transition: opacity .18s ease; }
+  .status-pill .status-dot.pill-content-hiding, #topbarPillText.pill-content-hiding { opacity: 0; }
+
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulseGreen 2s infinite; }
+
+  .status-pill--active  { background: rgba(45,244,200,.07);  border-color: rgba(45,244,200,.20); color: var(--accent); }
+  .status-pill--active .status-dot { background: var(--accent); animation: pulseGreen 2s infinite; }
+  .status-pill--lock { background: rgba(45,244,200,.07); border-color: rgba(45,244,200,.20); color: var(--accent); animation: pillDesaturate 2.5s ease-in-out infinite; }
+  .status-pill--lock .status-dot { background: var(--accent); animation: pulseGreen 2s infinite; }
+  @keyframes pillDesaturate {
+    0%,100% { filter: saturate(1);   opacity: 1; }
+    50%      { filter: saturate(0);   opacity: 0.5; }
+  }
+
+  .status-pill--ready   { background: rgba(249,180,49,.07);  border-color: rgba(249,180,49,.20); color: var(--accent4); }
+  .status-pill--ready .status-dot { background: var(--accent4); animation: pulseAmber 2s infinite; }
+
+  .status-pill--unlocked { background: rgba(240,78,116,.07); border-color: rgba(240,78,116,.20); color: var(--accent2); }
+  .status-pill--unlocked .status-dot { background: var(--accent2); animation: pulseRose 2s infinite; }
+
+  @keyframes pulseGreen  { 0%,100%{opacity:1; box-shadow:0 0 0 0 rgba(45,244,200,.45)}  50%{opacity:.8; box-shadow:0 0 0 5px rgba(45,244,200,0)} }
+  @keyframes pulseAmber  { 0%,100%{opacity:1; box-shadow:0 0 0 0 rgba(249,180,49,.45)}  50%{opacity:.8; box-shadow:0 0 0 5px rgba(249,180,49,0)} }
+  @keyframes pulseRose   { 0%,100%{opacity:1; box-shadow:0 0 0 0 rgba(240,78,116,.45)}  50%{opacity:.8; box-shadow:0 0 0 5px rgba(240,78,116,0)} }
+
+  /* Lock-now button */
+  .lock-now-btn {
+    display: flex; flex-direction: row; align-items: center; gap: 7px;
+    padding: 9px 22px;
+    background: linear-gradient(135deg, rgba(240,78,116,.13) 0%, rgba(240,78,116,.06) 100%);
+    backdrop-filter: blur(20px) saturate(1.6); -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    border: 2px solid rgba(240,78,116,.35); border-radius: 100px;
+    color: var(--accent2); font-family: var(--sans); font-size: 13px; font-weight: 600;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.10),
+      inset 0 -1px 0 rgba(240,78,116,.08),
+      0 4px 16px rgba(240,78,116,.15),
+      0 1px 4px rgba(0,0,0,.3);
+    transition: all .25s cubic-bezier(.4,0,.2,1);
+    cursor: pointer;
+  }
+  .lock-now-btn:hover {
+    background: linear-gradient(135deg, rgba(240,78,116,.22) 0%, rgba(240,78,116,.12) 100%);
+    border-color: rgba(240,78,116,.6);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.15),
+      inset 0 -1px 0 rgba(240,78,116,.10),
+      0 6px 24px rgba(240,78,116,.28),
+      0 2px 8px rgba(0,0,0,.3),
+      var(--glow-rose);
+    transform: translateY(-1px);
+  }
+  .lock-now-btn:active { transform: scale(.97); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 2px 8px rgba(240,78,116,.15); }
+
+  /* ── DASHBOARD LAYOUT ── */
+  .dash-container { max-width: 860px; margin: 0 auto; padding: 0 24px; width: 100%; }
+
+  .main-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 28px 32px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--glass-1); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 28px;
+    box-shadow: var(--shine), var(--shadow);
+    transition: background .3s, border-color .3s, box-shadow .3s, transform .3s;
+  }
+  .card:hover { background: var(--glass-2); border-color: var(--glass-border2); box-shadow: var(--shine), var(--shadow-lg); transform: translateY(-3px); }
+
+  .card-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
+    color: var(--text-dim); text-transform: uppercase; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-label::before { content: &#x27;&#x27;; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+
+  .card-value { font-family: var(--mono); font-size: 28px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .card-value.green { color: var(--accent); }
+  .card-value.red   { color: var(--red); }
+  .card-value.warn  { color: var(--warn); }
+  .card-value.blue  { color: var(--accent3); }
+  .card-sub { font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
+
+  /* ── SECTIONS ── */
+  .section { margin: 0 32px 32px; }
+  .section-header {
+    font-family: var(--sans); font-size: 10px; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--text-dim);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 12px;
+  }
+  .section-header::after { content: &#x27;&#x27;; flex: 1; height: 1px; background: linear-gradient(to right, var(--glass-border), transparent); }
+
+  /* ── TOGGLES ── */
+  .toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .toggle-item {
+    background: var(--glass-1); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-sm); padding: 18px 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: var(--shine); transition: background .25s, border-color .25s, transform .25s;
+  }
+  .toggle-item:hover { background: var(--glass-2); border-color: var(--glass-border2); transform: translateY(-1px); }
+  .toggle-info { flex: 1; }
+  .toggle-name { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .toggle-desc { font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
+
+  .toggle { position: relative; width: 44px; height: 24px; flex-shrink: 0; margin-left: 16px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 100px; transition: .3s;
+  }
+  .toggle-slider::before {
+    content: &#x27;&#x27;; position: absolute;
+    width: 18px; height: 18px; left: 3px; top: 3px;
+    background: rgba(255,255,255,0.28); border-radius: 50%; transition: .3s;
+  }
+  input:checked + .toggle-slider { background: rgba(45,244,200,.14); border-color: rgba(45,244,200,.40); }
+  input:checked + .toggle-slider::before { transform: translateX(20px); background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+
+  /* ── LOG ── */
+  .log-container {
+    background: var(--glass-1); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border-radius: var(--radius); border: 1px solid var(--glass-border);
+    box-shadow: var(--shine), var(--shadow); overflow: hidden;
+  }
+  .log-header {
+    background: rgba(255,255,255,0.025); padding: 12px 20px;
+    font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .log-body { max-height: 260px; overflow-y: auto; padding: 12px 0; }
+  .log-body::-webkit-scrollbar { width: 3px; }
+  .log-body::-webkit-scrollbar-track { background: transparent; }
+  .log-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+  .log-entry {
+    display: flex; align-items: flex-start; gap: 16px; padding: 8px 20px;
+    font-family: var(--mono); font-size: 12px;
+    border-left: 2px solid transparent; transition: background .15s;
+  }
+  .log-entry:hover { background: rgba(255,255,255,.025); }
+  .log-entry.warn    { border-left-color: var(--warn); }
+  .log-entry.danger  { border-left-color: var(--red); }
+  .log-entry.info    { border-left-color: var(--accent3); }
+  .log-entry.success { border-left-color: var(--accent); }
+
+  .log-time { color: var(--text-dim); white-space: nowrap; min-width: 60px; }
+  .log-badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 4px;
+    white-space: nowrap; font-weight: 600;
+  }
+  .log-badge.warn    { background: rgba(249,180,49,.12);   color: var(--warn); }
+  .log-badge.danger  { background: rgba(240,78,116,.12);   color: var(--red); }
+  .log-badge.info    { background: rgba(129,140,248,.12);  color: var(--accent3); }
+  .log-badge.success { background: rgba(45,244,200,.09);   color: var(--accent); }
+  .log-msg { color: var(--text); flex: 1; }
+
+  /* ── CAMERA ── */
+  .camera-section {
+    display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center;
+    background: var(--glass-1); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border-radius: var(--radius); padding: 20px 24px;
+    border: 1px solid var(--glass-border); box-shadow: var(--shine), var(--shadow);
+  }
+  .camera-preview {
+    width: 160px; height: 120px; background: #000;
+    border-radius: var(--radius-xs); overflow: hidden; position: relative;
+    border: 1px solid var(--glass-border2);
+  }
+  #camVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+  .cam-overlay {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 10px; color: var(--text-dim); background: rgba(0,0,0,.7);
+  }
+  #camVideo.active ~ .cam-overlay { display: none; }
+
+  .camera-status { font-family: var(--mono); font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .camera-hint { font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-bottom: 16px; }
+  .capture-count { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+  .capture-count span { color: var(--warn); font-weight: 600; }
+
+  .photos-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .photo-thumb {
+    width: 80px; height: 60px; border-radius: 5px; object-fit: cover;
+    border: 1px solid var(--glass-border); transition: transform .2s;
+  }
+  .photo-thumb:hover { transform: scale(1.06); border-color: var(--warn); }
+
+  /* ── EMAIL CONFIG ── */
+  .pw-dots { display: flex; gap: 10px; margin-bottom: 4px; cursor: pointer; }
+  .pw-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    background: transparent;
+    transition: background .15s, border-color .15s, box-shadow .15s;
+  }
+  .pw-dot-blue.filled  { background: var(--accent2); border-color: var(--accent2); box-shadow: 0 0 10px var(--accent2); }
+  .pw-dot-white.filled { background: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.9); box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+  .pw-dot-green.filled { background: #2df4a0; border-color: #2df4a0; box-shadow: 0 0 10px #2df4a0; }
+  .pw-dot.err { background: var(--accent2); border-color: var(--accent2); box-shadow: 0 0 10px var(--accent2); }
+
+  /* 비밀번호 변경 큰 버튼 */
+  .pw-change-open-btn {
+    width: 100%; padding: 18px 0; font-size: 15px; font-weight: 700;
+    font-family: var(--sans); letter-spacing: -.01em;
+    background: var(--glass-2); border: 1px solid var(--glass-border2);
+    border-radius: 16px; color: var(--text); cursor: pointer;
+    box-shadow: var(--shine), var(--shadow-lg);
+    transition: background .2s, border-color .2s, box-shadow .2s;
+    margin-top: 6px;
+  }
+  .pw-change-open-btn:hover { background: var(--glass-3); border-color: rgba(45,244,200,.42); box-shadow: var(--shine), var(--glow-teal); }
+
+  /* 비밀번호 변경 모달 */
+  #pwChangeModal {
+    position: fixed; inset: 0; z-index: 9100;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(4,6,15,0.55);
+    backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%);
+    opacity: 0; pointer-events: none; transition: opacity .35s ease;
+  }
+  #pwChangeModal.show { opacity: 1; pointer-events: all; }
+  .pw-change-box {
+    background: var(--glass-2); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border: 1px solid var(--glass-border2); border-radius: 26px;
+    padding: 40px 44px 36px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    box-shadow: var(--shine), var(--shadow-lg); min-width: 320px;
+    transition: transform .3s ease;
+  }
+  .pw-change-box.shake { animation: pinShake 0.5s ease; }
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    background: var(--glass-1); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border-radius: var(--radius); padding: 24px;
+    border: 1px solid var(--glass-border); box-shadow: var(--shine), var(--shadow);
+  }
+  .config-group { display: flex; flex-direction: column; gap: 6px; }
+  .config-group.full { grid-column: 1 / -1; }
+  .config-label { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); }
+  .config-input {
+    background: var(--glass-1); backdrop-filter: var(--blur-xs); -webkit-backdrop-filter: var(--blur-xs);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-xs);
+    color: var(--text); font-family: var(--mono); font-size: 13px; padding: 10px 14px;
+    outline: none; box-shadow: var(--shine); transition: border-color .2s, background .2s;
+  }
+  .config-input:focus { background: var(--glass-2); border-color: rgba(129,140,248,.45); }
+  .config-btn {
+    background: rgba(129,140,248,.10); backdrop-filter: var(--blur-xs);
+    color: var(--accent3); border: 1px solid rgba(129,140,248,.22); border-radius: 100px;
+    font-family: var(--sans); font-size: 12px; font-weight: 600; padding: 10px 24px;
+    box-shadow: var(--shine); transition: all .2s; white-space: nowrap;
+  }
+  .config-btn:hover { background: rgba(129,140,248,.20); border-color: rgba(129,140,248,.48); transform: translateY(-1px); }
+
+  /* ── LOCATION ── */
+  .location-card {
+    background: var(--glass-1); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border-radius: var(--radius); padding: 24px; border: 1px solid var(--glass-border);
+    box-shadow: var(--shine), var(--shadow); display: flex; align-items: center; gap: 24px;
+  }
+  .location-icon { font-size: 36px; }
+  .location-info { flex: 1; }
+  .location-coords { font-family: var(--mono); font-size: 16px; font-weight: 600; color: var(--accent3); margin-bottom: 4px; }
+  .location-detail { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+  .location-refresh {
+    background: var(--glass-0); border: 1px solid var(--glass-border);
+    color: var(--text-dim); font-family: var(--mono); font-size: 11px;
+    padding: 8px 18px; border-radius: 100px; transition: all .2s;
+  }
+  .location-refresh:hover { border-color: rgba(129,140,248,.4); color: var(--accent3); background: rgba(129,140,248,.08); }
+
+  /* ── SETUP MODAL ── */
+  #captureCanvas { display: none; }
+  #setupModal {
+    position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 3000;
+    display: none; align-items: center; justify-content: center;
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  }
+  #setupModal.show { display: flex; }
+  .modal-box {
+    background: var(--glass-2); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border: 1px solid var(--glass-border2); border-radius: 28px; padding: 40px;
+    width: 420px; max-width: 90vw;
+    box-shadow: var(--shine), var(--shadow-lg);
+  }
+  .modal-title { font-family: var(--sans); font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .modal-sub { font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin-bottom: 32px; }
+  .modal-group { margin-bottom: 20px; }
+  .modal-group label { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+  .modal-group input {
+    width: 100%; background: var(--glass-1); border: 1px solid var(--glass-border2);
+    border-radius: var(--radius-sm); color: var(--text);
+    font-family: var(--mono); font-size: 15px; padding: 12px 16px; outline: none;
+    letter-spacing: .2em; box-shadow: var(--shine);
+    transition: border-color .2s, background .2s;
+  }
+  .modal-group input:focus { background: var(--glass-2); border-color: rgba(45,244,200,.4); }
+  .modal-btns { display: flex; gap: 12px; margin-top: 28px; }
+  .modal-save {
+    flex: 1; background: rgba(45,244,200,.12); color: var(--accent);
+    border: 1px solid rgba(45,244,200,.28); border-radius: 100px;
+    font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 13px;
+    box-shadow: var(--shine); transition: all .2s;
+  }
+  .modal-save:hover { background: rgba(45,244,200,.22); border-color: rgba(45,244,200,.55); box-shadow: var(--shine), var(--glow-teal); }
+  .modal-cancel {
+    background: var(--glass-0); border: 1px solid var(--glass-border);
+    color: var(--text-dim); border-radius: 100px;
+    font-family: var(--mono); font-size: 13px; padding: 13px 20px; transition: all .2s;
+  }
+  .modal-cancel:hover { background: var(--glass-1); color: var(--text); }
+
+  /* ── CLOSE GUARD ── */
+  #closeGuard {
+    position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 8000;
+    display: none; align-items: center; justify-content: center;
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  }
+  #closeGuard.show { display: flex; }
+  .closeguard-box {
+    background: var(--glass-2); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border: 1px solid rgba(240,78,116,.18); border-radius: 28px; padding: 48px 40px;
+    width: 380px; max-width: 90vw;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    box-shadow: var(--shine), 0 0 48px rgba(240,78,116,.10), var(--shadow-lg);
+  }
+  .closeguard-icon { font-size: 48px; }
+  .closeguard-title { font-family: var(--sans); font-size: 21px; font-weight: 800; color: var(--red); letter-spacing: -.02em; }
+  .closeguard-sub { font-family: var(--mono); font-size: 12px; color: var(--text-dim); text-align: center; margin-bottom: 8px; }
+  #closeGuardInput {
+    background: var(--glass-1); border: 1px solid rgba(240,78,116,.28); border-radius: var(--radius-sm);
+    color: #fff; font-family: var(--mono); font-size: 20px; letter-spacing: .3em;
+    padding: 13px 16px 13px 26px; width: 100%; text-align: center; outline: none;
+    box-shadow: var(--shine); transition: border-color .2s, background .2s;
+  }
+  #closeGuardInput:focus { background: rgba(240,78,116,.06); border-color: var(--red); }
+  #closeGuardInput.shake { animation: shake .4s ease; border-color: var(--red); }
+  .closeguard-error { font-family: var(--mono); font-size: 12px; color: rgba(255,110,120,.9); min-height: 18px; }
+  .closeguard-btn {
+    margin-top: 8px; background: rgba(240,78,116,.12); color: var(--red);
+    border: 1px solid rgba(240,78,116,.30); border-radius: 100px;
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    padding: 13px 32px; width: 100%; transition: all .2s;
+  }
+  .closeguard-btn:hover { background: rgba(240,78,116,.22); border-color: rgba(240,78,116,.60); box-shadow: var(--glow-rose); }
+
+  /* ── COUNTDOWN OVERLAY ── */
+  #countdownOverlay {
+    position: fixed; inset: 0; z-index: 9000;
+    background: rgba(4,6,15,0.92); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    gap: 16px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .45s ease;
+  }
+  #countdownOverlay.show { opacity: 1; pointer-events: all; }
+  .countdown-num {
+    font-family: var(--sans); font-size: clamp(80px,20vw,160px); font-weight: 800;
+    color: var(--accent2); letter-spacing: -.04em;
+    text-shadow: 0 0 60px rgba(240,78,116,.5), 0 0 120px rgba(240,78,116,.25);
+    line-height: 1;
+  }
+  .countdown-label { font-family: var(--mono); font-size: 12px; letter-spacing: .3em; color: var(--text-dim); }
+
+  /* ── LIGHTBOX ── */
+  #lightbox {
+    position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 5000;
+    display: none; align-items: center; justify-content: center;
+    backdrop-filter: blur(12px);
+  }
+  #lightbox.show { display: flex; }
+  #lightboxImg { max-width: 90vw; max-height: 90vh; border-radius: var(--radius-xs); box-shadow: var(--shadow-lg); }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 32px; right: 32px;
+    background: var(--glass-3); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border: 1px solid var(--glass-border2); border-radius: var(--radius-sm);
+    padding: 14px 20px; font-family: var(--mono); font-size: 13px; color: var(--text);
+    z-index: 9000; transform: translateY(20px); opacity: 0;
+    transition: all .35s cubic-bezier(.4,0,.2,1);
+    max-width: 320px; box-shadow: var(--shine), var(--shadow-lg);
+  }
+  #toast.show { transform: translateY(0); opacity: 1; }
+  #toast.green { border-color: rgba(45,244,200,.30); color: var(--accent); }
+  #toast.red   { border-color: rgba(240,78,116,.30); color: var(--red); }
+  #toast.warn  { border-color: rgba(249,180,49,.30); color: var(--warn); }
+
+  /* ═══════════════════════════════════════
+     INTRO SCREEN
+     ═══════════════════════════════════════ */
+  #introScreen {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 75% 60% at 12% 10%, rgba(45,244,200,0.14) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 88% 85%, rgba(129,140,248,0.17) 0%, transparent 52%),
+      radial-gradient(ellipse 55% 65% at 50% 50%, rgba(240,78,116,0.07) 0%, transparent 60%);
+    display: flex; flex-direction: column; align-items: center;
+    overflow-y: auto; padding: 0;
+    font-family: var(--sans);
+    opacity: 1; pointer-events: none; transition: opacity .5s ease;
+  }
+  #introScreen.visible { pointer-events: all; }
+  .intro-inner { position: relative; z-index: 2; width: 100%; max-width: 860px; }
+
+  .intro-logo { text-align: center; margin-bottom: 8px; font-size: 10px; letter-spacing: 5px; color: var(--accent); opacity: .50; font-family: var(--mono); }
+  .intro-title {
+    text-align: center; font-size: clamp(32px, 5vw, 54px); font-weight: 800;
+    color: #fff; letter-spacing: -.025em; margin-bottom: 6px;
+    text-shadow: 0 0 60px rgba(45,244,200,.30), 0 0 120px rgba(45,244,200,.12);
+  }
+  .intro-subtitle { text-align: center; font-size: 10px; color: var(--text-dim); letter-spacing: 4px; margin-bottom: 44px; font-family: var(--mono); }
+
+  .intro-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 12px; margin-bottom: 36px; }
+  .intro-card {
+    background: var(--glass-1); backdrop-filter: var(--blur-sm); -webkit-backdrop-filter: var(--blur-sm);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-sm); padding: 20px 18px;
+    box-shadow: var(--shine), var(--shadow); transition: border-color .25s, background .25s, transform .25s;
+  }
+  .intro-card:hover { border-color: rgba(45,244,200,.22); background: var(--glass-2); transform: translateY(-3px); }
+  .intro-card-icon { font-size: 22px; margin-bottom: 10px; }
+  .intro-card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .intro-card-desc { font-size: 11px; color: var(--text-dim); line-height: 1.6; font-family: var(--mono); }
+
+  .intro-section-title { font-size: 10px; letter-spacing: 3px; color: var(--accent); opacity: .65; margin-bottom: 14px; margin-top: 32px; border-bottom: 1px solid rgba(45,244,200,.12); padding-bottom: 8px; font-family: var(--mono); }
+
+  .intro-steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 0; }
+  .intro-step {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: var(--glass-1); backdrop-filter: var(--blur-xs); -webkit-backdrop-filter: var(--blur-xs);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-xs); padding: 14px 16px;
+    box-shadow: var(--shine);
+  }
+  .intro-step-num {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(45,244,200,.10); border: 1px solid rgba(45,244,200,.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: var(--accent);
+  }
+  .intro-step-text { font-size: 12px; color: var(--text-dim); line-height: 1.6; font-family: var(--mono); }
+  .intro-step-text strong { color: var(--text); }
+
+  .intro-kiosk {
+    background: var(--glass-1); backdrop-filter: var(--blur-xs); -webkit-backdrop-filter: var(--blur-xs);
+    border: 1px solid rgba(129,140,248,.18); border-radius: var(--radius-sm); padding: 18px 20px;
+    box-shadow: var(--shine);
+  }
+  .intro-kiosk-title { font-size: 12px; font-weight: 600; color: var(--accent3); margin-bottom: 10px; }
+  .intro-kiosk-text { font-size: 11px; color: var(--text-dim); line-height: 1.8; font-family: var(--mono); }
+  .intro-kiosk-text code { background: rgba(129,140,248,.12); color: var(--accent3); padding: 1px 6px; border-radius: 4px; font-size: 11px; }
+
+  .intro-warning {
+    background: var(--glass-1); backdrop-filter: var(--blur-xs); -webkit-backdrop-filter: var(--blur-xs);
+    border: 1px solid rgba(249,180,49,.18); border-radius: var(--radius-sm); padding: 16px 20px;
+    box-shadow: var(--shine);
+  }
+  .intro-warning-title { font-size: 12px; font-weight: 600; color: var(--accent4); margin-bottom: 8px; }
+  .intro-warning-text { font-size: 11px; color: var(--text-dim); line-height: 1.8; font-family: var(--mono); }
+
+  .intro-pin-area {
+    background: var(--glass-1); backdrop-filter: var(--blur-sm); -webkit-backdrop-filter: var(--blur-sm);
+    border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 28px 24px;
+    text-align: center; box-shadow: var(--shine), var(--shadow);
+  }
+  .intro-pin-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .intro-pin-sub { font-size: 11px; color: var(--text-dim); margin-bottom: 22px; line-height: 1.6; font-family: var(--mono); }
+
+  /* Intro buttons */
+  .intro-btn-row { display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 20px; }
+  .intro-btn-row .intro-settings-btn { width: 100%; margin: 0; border-radius: var(--radius-xs); }
+  .intro-btn-row .intro-start-btn {
+    width: 100%; margin: 0; border-radius: var(--radius-xs);
+    background: rgba(45,244,200,.10); border: 1px solid rgba(45,244,200,.35);
+    color: var(--accent); font-size: 14px; font-weight: 800;
+    box-shadow: var(--shine), 0 0 20px rgba(45,244,200,.10);
+  }
+  .intro-btn-row .intro-start-btn:not(:disabled):hover {
+    background: rgba(45,244,200,.18); border-color: rgba(45,244,200,.60);
+    box-shadow: var(--shine), var(--glow-teal);
+  }
+
+  .intro-start-btn {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 14px;
+    background: var(--glass-1); backdrop-filter: var(--blur-xs); -webkit-backdrop-filter: var(--blur-xs);
+    border: 1px solid rgba(45,244,200,.18); border-radius: var(--radius-xs);
+    color: rgba(45,244,200,.45); font-family: var(--sans); font-size: 12px; font-weight: 700;
+    box-shadow: var(--shine); transition: all .2s; box-sizing: border-box; margin-top: 20px;
+  }
+  .intro-start-btn:disabled { opacity: .3; }
+  .intro-start-btn:not(:disabled):hover { background: rgba(45,244,200,.08); border-color: rgba(45,244,200,.40); color: var(--accent); box-shadow: var(--shine), var(--glow-teal); }
+  .intro-start-btn:not(:disabled):active { transform: scale(.98); }
+
+  .intro-settings-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 14px;
+    background: var(--glass-1); backdrop-filter: var(--blur-xs); -webkit-backdrop-filter: var(--blur-xs);
+    border: 1px solid rgba(129,140,248,.20); border-radius: var(--radius-xs);
+    color: var(--accent3); font-family: var(--sans); font-size: 13px; font-weight: 600;
+    box-shadow: var(--shine); cursor: pointer; transition: all .2s;
+    margin-top: 10px; box-sizing: border-box;
+  }
+  .intro-settings-btn:hover { background: var(--glass-2); border-color: rgba(129,140,248,.42); }
+  .intro-settings-btn:disabled { opacity: .3; cursor: not-allowed; }
+
+  .intro-btn-divider {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; gap: 10px; padding: 8px 0;
+    color: var(--text-dim); font-size: 11px; font-family: var(--mono);
+  }
+  .intro-btn-divider::before, .intro-btn-divider::after {
+    content: &#x27;&#x27;; flex: 1; height: 1px;
+    background: linear-gradient(to right, transparent, var(--glass-border), transparent);
+  }
+
+  /* ═══════════════════════════════════════
+     PIN SETUP MODAL
+     ═══════════════════════════════════════ */
+  #pinSetupModal {
+    position: fixed; inset: 0; z-index: 8500;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(4,6,15,0.55);
+    backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%);
+    opacity: 0; pointer-events: none;
+    transition: opacity .5s ease;
+  }
+  #pinSetupModal.show { opacity: 1; pointer-events: all; }
+
+  .pin-setup-box {
+    background: var(--glass-2); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    border: 1px solid var(--glass-border2); border-radius: 26px;
+    padding: 44px 48px 40px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    box-shadow: var(--shine), var(--shadow-lg); min-width: 340px;
+    transform: scale(1) translateY(0);
+    transition: transform .45s cubic-bezier(.4,0,.2,1), opacity .45s ease;
+  }
+  #pinSetupModal:not(.show) .pin-setup-box { transform: scale(0.93) translateY(18px); opacity: 0; }
+
+  .pin-setup-title { font-family: var(--sans); font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: -.01em; margin-bottom: 6px; text-align: center; }
+  .pin-setup-sub { font-size: 11px; color: var(--text-dim); text-align: center; font-family: var(--mono); margin-bottom: 20px; line-height: 1.6; }
+  .pin-setup-label { font-family: var(--mono); font-size: 9.5px; color: var(--text-dim); letter-spacing: .16em; align-self: flex-start; margin-bottom: 6px; margin-top: 8px; text-transform: uppercase; }
+
+  .pin-setup-dots { display: flex; gap: 12px; margin-bottom: 4px; cursor: pointer; }
+  .pin-setup-dot {
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.04);
+    transition: all .15s cubic-bezier(.4,0,.2,1);
+  }
+  .pin-setup-dot.filled  { background: var(--accent);  border-color: var(--accent);  box-shadow: 0 0 12px var(--accent), 0 0 4px var(--accent); }
+  .pin-setup-dot.filled-b { background: var(--accent2); border-color: var(--accent2); box-shadow: 0 0 12px var(--accent2); }
+
+  .pin-setup-input { position: fixed; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; border: none; outline: none; }
+
+  .pin-setup-msg { font-size: 11px; min-height: 16px; text-align: center; margin-top: 4px; font-family: var(--mono); }
+  .pin-setup-msg.ok  { color: var(--accent); }
+  .pin-setup-msg.err { color: var(--accent2); }
+  @keyframes pinShake {
+    0%,100% { transform: translateX(0); }
+    15%     { transform: translateX(-10px); }
+    30%     { transform: translateX(10px); }
+    45%     { transform: translateX(-8px); }
+    60%     { transform: translateX(8px); }
+    75%     { transform: translateX(-4px); }
+    90%     { transform: translateX(4px); }
+  }
+  .pin-setup-box.shake { animation: pinShake 0.5s ease; }
+
+  .pin-setup-confirm-btn {
+    margin-top: 20px; font-family: var(--sans); font-size: 12px; font-weight: 600;
+    padding: 10px 36px; border-radius: 100px;
+    background: var(--glass-2); backdrop-filter: var(--blur-xs); -webkit-backdrop-filter: var(--blur-xs);
+    color: var(--accent); border: 1px solid rgba(45,244,200,.22);
+    cursor: pointer; box-shadow: var(--shine); transition: all .2s;
+  }
+  .pin-setup-confirm-btn:not(:disabled):hover { background: var(--glass-3); border-color: rgba(45,244,200,.48); box-shadow: var(--shine), var(--glow-teal); }
+  .pin-setup-confirm-btn:disabled { opacity: .25; cursor: not-allowed; }
+&lt;/style&gt;
+
+
+
+&lt;meta name=&quot;mobile-web-app-capable&quot; content=&quot;yes&quot;&gt;
+&lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot;&gt;
+&lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;default&quot;&gt;
+
+
+&lt;/head&gt;
+&lt;body inert&gt;
+
+
+&lt;div id=&quot;sharedTopbar&quot; class=&quot;topbar&quot;&gt;
+  &lt;div class=&quot;topbar-inner&quot;&gt;
+    &lt;div class=&quot;topbar-logo&quot;&gt;Mac&lt;span&gt;Guard&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;lock-now-btn-wrap&quot; id=&quot;topbarLockBtn&quot; style=&quot;display:none&quot;&gt;
+      &lt;button class=&quot;lock-now-btn&quot;&gt;
+        &lt;span style=&quot;font-size:14px&quot;&gt;🔒&lt;/span&gt;
+        &lt;span&gt;즉시 잠금&lt;/span&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;topbarPill&quot; class=&quot;status-pill status-pill--ready&quot; style=&quot;margin-left:auto;&quot;&gt;
+      &lt;div class=&quot;status-dot&quot;&gt;&lt;/div&gt;&lt;span id=&quot;topbarPillText&quot;&gt;보호 준비 중&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&quot;pwChangeModal&quot;&gt;
+  &lt;div class=&quot;pw-change-box&quot;&gt;
+    &lt;div class=&quot;pin-setup-title&quot;&gt;🔑 비밀번호 변경&lt;/div&gt;
+
+    &lt;div class=&quot;pin-setup-label&quot;&gt;현재 PIN&lt;/div&gt;
+    &lt;div class=&quot;pw-dots&quot; id=&quot;pmCurDots&quot;&gt;
+      &lt;div class=&quot;pw-dot pw-dot-blue&quot; id=&quot;pmCD0&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-blue&quot; id=&quot;pmCD1&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-blue&quot; id=&quot;pmCD2&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-blue&quot; id=&quot;pmCD3&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-blue&quot; id=&quot;pmCD4&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-blue&quot; id=&quot;pmCD5&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;input type=&quot;password&quot; class=&quot;pin-setup-input&quot; id=&quot;pmCur&quot; maxlength=&quot;6&quot; inputmode=&quot;numeric&quot; autocomplete=&quot;off&quot;&gt;
+
+    &lt;div class=&quot;pin-setup-label&quot;&gt;새 PIN&lt;/div&gt;
+    &lt;div class=&quot;pw-dots&quot; id=&quot;pmNewDots&quot;&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmND0&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmND1&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmND2&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmND3&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmND4&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmND5&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;input type=&quot;password&quot; class=&quot;pin-setup-input&quot; id=&quot;pmNew&quot; maxlength=&quot;6&quot; inputmode=&quot;numeric&quot; autocomplete=&quot;off&quot;&gt;
+
+    &lt;div class=&quot;pin-setup-label&quot;&gt;새 PIN 확인&lt;/div&gt;
+    &lt;div class=&quot;pw-dots&quot; id=&quot;pmCfDots&quot;&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmCFD0&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmCFD1&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmCFD2&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmCFD3&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmCFD4&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pw-dot pw-dot-green&quot; id=&quot;pmCFD5&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;input type=&quot;password&quot; class=&quot;pin-setup-input&quot; id=&quot;pmCf&quot; maxlength=&quot;6&quot; inputmode=&quot;numeric&quot; autocomplete=&quot;off&quot;&gt;
+
+    &lt;div class=&quot;pin-setup-msg&quot; id=&quot;pmMsg&quot;&gt;&lt;/div&gt;
+    &lt;div style=&quot;display:flex;gap:10px;margin-top:8px;width:100%;&quot;&gt;
+      &lt;button class=&quot;pin-setup-confirm-btn&quot; style=&quot;flex:1;background:var(--glass-1);&quot;&gt;취소&lt;/button&gt;
+      &lt;button class=&quot;pin-setup-confirm-btn&quot; style=&quot;flex:2;&quot;&gt;확인&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&quot;pinSetupModal&quot; class=&quot;show&quot;&gt;
+  &lt;div class=&quot;pin-setup-box&quot;&gt;
+    &lt;div class=&quot;pin-setup-title&quot;&gt;🔐 PIN 설정&lt;/div&gt;
+    &lt;div class=&quot;pin-setup-sub&quot;&gt;6자리 숫자 PIN을 설정하세요.&lt;br&gt;이 PIN으로 잠금을 해제하고 설정을 변경할 수 있습니다.&lt;/div&gt;
+
+    &lt;div class=&quot;pin-setup-label&quot;&gt;새 PIN&lt;/div&gt;
+    &lt;div class=&quot;pin-setup-dots&quot; id=&quot;pinSetupDotsA&quot;&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdA0&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdA1&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdA2&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdA3&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdA4&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdA5&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;input type=&quot;password&quot; id=&quot;pinSetupInputA&quot; class=&quot;pin-setup-input&quot; maxlength=&quot;6&quot; inputmode=&quot;numeric&quot; autocomplete=&quot;off&quot;&gt;
+
+    &lt;div class=&quot;pin-setup-label&quot;&gt;PIN 확인&lt;/div&gt;
+    &lt;div class=&quot;pin-setup-dots&quot; id=&quot;pinSetupDotsB&quot;&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdB0&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdB1&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdB2&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdB3&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdB4&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;pin-setup-dot&quot; id=&quot;psdB5&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;input type=&quot;password&quot; id=&quot;pinSetupInputB&quot; class=&quot;pin-setup-input&quot; maxlength=&quot;6&quot; inputmode=&quot;numeric&quot; autocomplete=&quot;off&quot;&gt;
+
+    &lt;div class=&quot;pin-setup-msg&quot; id=&quot;pinSetupMsg&quot;&gt;&lt;/div&gt;
+    &lt;button class=&quot;pin-setup-confirm-btn&quot; id=&quot;pinSetupConfirmBtn&quot; disabled&gt;확인&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+
+&lt;div id=&quot;introScreen&quot;&gt;
+  &lt;div class=&quot;intro-inner&quot; style=&quot;padding-top:80px; padding-bottom:60px;&quot;&gt;
+    &lt;div class=&quot;intro-logo&quot;&gt;// MACGUARD SECURITY SYSTEM v1.0&lt;/div&gt;
+    &lt;div class=&quot;intro-title&quot;&gt;MacGuard&lt;/div&gt;
+    &lt;div class=&quot;intro-subtitle&quot;&gt;ANTI-THEFT PROTECTION&lt;/div&gt;
+
+    
+    &lt;div class=&quot;intro-section-title&quot;&gt;▸ 주요 기능&lt;/div&gt;
+    &lt;div class=&quot;intro-cards&quot;&gt;
+      &lt;div class=&quot;intro-card&quot;&gt;
+        &lt;div class=&quot;intro-card-icon&quot;&gt;🚨&lt;/div&gt;
+        &lt;div class=&quot;intro-card-title&quot;&gt;경보 시스템&lt;/div&gt;
+        &lt;div class=&quot;intro-card-desc&quot;&gt;비밀번호 오류, 화면 변경, 전원 해제 등 이상 감지 시 즉시 사이렌 경보 발동&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;intro-card&quot;&gt;
+        &lt;div class=&quot;intro-card-icon&quot;&gt;📸&lt;/div&gt;
+        &lt;div class=&quot;intro-card-title&quot;&gt;침입자 촬영&lt;/div&gt;
+        &lt;div class=&quot;intro-card-desc&quot;&gt;경보 발동 시 웹캠으로 침입자 자동 촬영 및 타임스탬프 기록&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;intro-card&quot;&gt;
+        &lt;div class=&quot;intro-card-icon&quot;&gt;📍&lt;/div&gt;
+        &lt;div class=&quot;intro-card-title&quot;&gt;위치 추적&lt;/div&gt;
+        &lt;div class=&quot;intro-card-desc&quot;&gt;GPS 및 IP 기반 실시간 위치 추적으로 도난 맥북 위치 파악&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;intro-card&quot;&gt;
+        &lt;div class=&quot;intro-card-icon&quot;&gt;🔌&lt;/div&gt;
+        &lt;div class=&quot;intro-card-title&quot;&gt;전원 감지&lt;/div&gt;
+        &lt;div class=&quot;intro-card-desc&quot;&gt;충전 케이블 제거 즉시 감지하여 도난 시도 조기 경보&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;intro-card&quot;&gt;
+        &lt;div class=&quot;intro-card-icon&quot;&gt;🌐&lt;/div&gt;
+        &lt;div class=&quot;intro-card-title&quot;&gt;네트워크 감지&lt;/div&gt;
+        &lt;div class=&quot;intro-card-desc&quot;&gt;Wi-Fi 변경 감지로 다른 장소로 이동 여부 실시간 모니터링&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;intro-card&quot;&gt;
+        &lt;div class=&quot;intro-card-icon&quot;&gt;📋&lt;/div&gt;
+        &lt;div class=&quot;intro-card-title&quot;&gt;보안 로그&lt;/div&gt;
+        &lt;div class=&quot;intro-card-desc&quot;&gt;모든 보안 이벤트를 실시간 기록, 항목별 필터링 설정 지원&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;intro-card&quot;&gt;
+        &lt;div class=&quot;intro-card-icon&quot;&gt;🔵&lt;/div&gt;
+        &lt;div class=&quot;intro-card-title&quot;&gt;블루투스 감지&lt;/div&gt;
+        &lt;div class=&quot;intro-card-desc&quot;&gt;등록된 블루투스 기기(이어폰, 마우스 등) 연결이 끊어지면 자리를 비운 것으로 판단하여 즉시 경보 발동&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    
+    &lt;div class=&quot;intro-section-title&quot;&gt;▸ 사용 방법&lt;/div&gt;
+    &lt;div class=&quot;intro-steps&quot;&gt;
+      &lt;div class=&quot;intro-step&quot;&gt;
+        &lt;div class=&quot;intro-step-num&quot;&gt;1&lt;/div&gt;
+        &lt;div class=&quot;intro-step-text&quot;&gt;&lt;strong&gt;PIN 설정&lt;/strong&gt; — 아래에서 6자리 비밀번호를 설정합니다. 잠금 해제 및 설정 변경 시 사용됩니다.&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;intro-step&quot;&gt;
+        &lt;div class=&quot;intro-step-num&quot;&gt;2&lt;/div&gt;
+        &lt;div class=&quot;intro-step-text&quot;&gt;&lt;strong&gt;시작 버튼 클릭&lt;/strong&gt; — 잠금 화면으로 진입하며 보안 감지가 활성화됩니다.&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;intro-step&quot;&gt;
+        &lt;div class=&quot;intro-step-num&quot;&gt;3&lt;/div&gt;
+        &lt;div class=&quot;intro-step-text&quot;&gt;&lt;strong&gt;맥북을 자리에 두고 자리를 비웁니다&lt;/strong&gt; — 이상 징후 감지 시 자동으로 경보가 발동됩니다.&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;intro-step&quot;&gt;
+        &lt;div class=&quot;intro-step-num&quot;&gt;4&lt;/div&gt;
+        &lt;div class=&quot;intro-step-text&quot;&gt;&lt;strong&gt;돌아왔을 때&lt;/strong&gt; — PIN을 입력하면 경보가 해제되고 대시보드에서 보안 로그와 촬영 사진을 확인할 수 있습니다.&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    
+    &lt;div class=&quot;intro-section-title&quot;&gt;▸ 주의사항 및 면책조항&lt;/div&gt;
+    &lt;div class=&quot;intro-warning&quot;&gt;
+      &lt;div class=&quot;intro-warning-title&quot;&gt;⚠️ 사용 전 반드시 확인하세요&lt;/div&gt;
+      &lt;div class=&quot;intro-warning-text&quot;&gt;
+        🔊 &lt;strong&gt;볼륨 경고&lt;/strong&gt; — 경보 발동 시 설정한 볼륨으로 사이렌이 울립니다. 시작 전 스피커 볼륨을 적절히 설정하세요.&lt;br&gt;&lt;br&gt;
+        📷 &lt;strong&gt;카메라 권한&lt;/strong&gt; — 침입자 촬영 기능 사용 시 브라우저 카메라 접근 권한이 필요합니다.&lt;br&gt;&lt;br&gt;
+        ⚖️ &lt;strong&gt;면책조항&lt;/strong&gt; — 본 앱은 도난 억제를 보조하는 도구입니다. 도난 방지를 100% 보장하지 않으며, 사용 중 발생하는 어떠한 피해에 대해서도 책임을 지지 않습니다. 공공장소 사용 시 주변 소음에 유의하세요.
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    
+    &lt;div class=&quot;intro-section-title&quot;&gt;▸ PIN 설정&lt;/div&gt;
+    &lt;div class=&quot;intro-btn-row&quot;&gt;
+      &lt;button class=&quot;intro-settings-btn&quot; id=&quot;introSettingsBtn&quot; disabled&gt;
+        &lt;span style=&quot;font-size:15px&quot;&gt;⚙️&lt;/span&gt;
+        &lt;span&gt;설정 화면으로&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;div class=&quot;intro-btn-divider&quot;&gt;혹은&lt;/div&gt;
+      &lt;button class=&quot;intro-start-btn&quot; id=&quot;introStartBtn&quot; disabled&gt;
+        &lt;span style=&quot;font-size:16px&quot;&gt;🔒&lt;/span&gt;
+        &lt;span&gt;보안 바로 시작&lt;/span&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&quot;lockScreen&quot; style=&quot;display:none&quot;&gt;
+  &lt;div class=&quot;lock-content&quot; style=&quot;padding-top:70px;&quot;&gt;
+  &lt;div class=&quot;lock-logo&quot;&gt;MacGuard Security System v1.0&lt;/div&gt;
+  &lt;div class=&quot;lock-title&quot;&gt;MacGuard&lt;/div&gt;
+  &lt;div class=&quot;lock-sub&quot;&gt;// ANTI-THEFT PROTECTION ACTIVE&lt;/div&gt;
+
+  &lt;div class=&quot;lock-ring&quot;&gt;
+    &lt;div class=&quot;lock-icon&quot;&gt;
+      &lt;svg width=&quot;56&quot; height=&quot;64&quot; viewbox=&quot;0 0 56 64&quot; fill=&quot;none&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+        &lt;path d=&quot;M28 2L4 12V32C4 46.4 14.6 59.8 28 63C41.4 59.8 52 46.4 52 32V12L28 2Z&quot; fill=&quot;color-mix(in srgb, currentColor 12%, transparent)&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.5&quot; stroke-linejoin=&quot;round&quot;/&gt;
+        &lt;path d=&quot;M28 6L7 15V32C7 44.8 16.4 57 28 60C39.6 57 49 44.8 49 32V15L28 6Z&quot; fill=&quot;color-mix(in srgb, currentColor 8%, transparent)&quot;/&gt;
+        &lt;path d=&quot;M19 31L25 37L37 25&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/&gt;
+      &lt;/svg&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;pin-display&quot; id=&quot;pinDisplay&quot; tabindex=&quot;-1&quot; style=&quot;outline:none!important;box-shadow:none!important;&quot;&gt;
+    &lt;div class=&quot;pin-dot&quot; id=&quot;dot0&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;pin-dot&quot; id=&quot;dot1&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;pin-dot&quot; id=&quot;dot2&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;pin-dot&quot; id=&quot;dot3&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;pin-dot&quot; id=&quot;dot4&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;pin-dot&quot; id=&quot;dot5&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;input type=&quot;password&quot; id=&quot;pinInput&quot; maxlength=&quot;6&quot; autocomplete=&quot;off&quot; inputmode=&quot;numeric&quot; style=&quot;position:absolute;opacity:0;pointer-events:none;width:0;height:0;outline:none;box-shadow:none;border:none;&quot;&gt;
+
+  &lt;button class=&quot;unlock-btn&quot; style=&quot;display:none&quot;&gt;UNLOCK&lt;/button&gt;
+  &lt;div class=&quot;fail-count&quot; id=&quot;failCount&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&quot;alertOverlay&quot;&gt;
+  &lt;div class=&quot;alert-icon&quot; id=&quot;alertIcon&quot;&gt;🚨&lt;/div&gt;
+  &lt;div class=&quot;alert-title&quot; id=&quot;alertTitle&quot;&gt;SECURITY ALERT&lt;/div&gt;
+  &lt;div class=&quot;alert-sub&quot; id=&quot;alertSub&quot;&gt;침입 시도가 감지되었습니다&lt;/div&gt;
+
+  &lt;div class=&quot;alert-pin-wrap&quot; id=&quot;alertPinWrap&quot; style=&quot;display:none;&quot;&gt;
+    &lt;div class=&quot;alert-pin-dots&quot; id=&quot;alertPinDots&quot; tabindex=&quot;-1&quot; style=&quot;outline:none!important;box-shadow:none!important;&quot;&gt;
+      &lt;div class=&quot;alert-dot&quot; id=&quot;adot0&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;alert-dot&quot; id=&quot;adot1&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;alert-dot&quot; id=&quot;adot2&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;alert-dot&quot; id=&quot;adot3&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;alert-dot&quot; id=&quot;adot4&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;alert-dot&quot; id=&quot;adot5&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;input type=&quot;password&quot; id=&quot;alertPinInput&quot; maxlength=&quot;6&quot; autocomplete=&quot;off&quot; inputmode=&quot;numeric&quot; style=&quot;position:absolute;opacity:0;pointer-events:none;width:0;height:0;outline:none;box-shadow:none;border:none;&quot;&gt;
+    &lt;div class=&quot;alert-pin-error&quot; id=&quot;alertPinError&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;button class=&quot;alert-dismiss&quot; id=&quot;alertDismissBtn&quot;&gt;경보 해제 &lt;span style=&quot;font-size:11px;opacity:0.6;&quot;&gt;[Enter 또는 Space]&lt;/span&gt;&lt;/button&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&quot;countdownOverlay&quot;&gt;
+  &lt;div id=&quot;countdownSlot&quot; style=&quot;display:flex;align-items:center;justify-content:center;height:160px;&quot;&gt;
+    &lt;div id=&quot;countdownColon&quot; style=&quot;font-family:&amp;#x27;Martian Mono&amp;#x27;, var(--mono); font-size:140px; color:var(--accent2); letter-spacing:-4px; text-shadow: 0 0 60px rgba(240,78,116,.9), 0 0 120px rgba(240,78,116,.4); line-height:1; transition: opacity .4s ease;&quot;&gt;:&lt;/div&gt;
+    &lt;div style=&quot;overflow:hidden; height:260px; padding:60px 80px; margin:-60px -80px; display:flex; align-items:center;&quot;&gt;
+      &lt;div id=&quot;countdownTens&quot; style=&quot;font-family:&amp;#x27;Martian Mono&amp;#x27;, var(--mono); font-size:140px; color:var(--accent2); letter-spacing:-4px; text-shadow: 0 0 60px rgba(240,78,116,.9), 0 0 120px rgba(240,78,116,.4); line-height:1; transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .3s ease;&quot;&gt;0&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;overflow:hidden; height:260px; padding:60px 80px; margin:-60px -80px; display:flex; align-items:center;&quot;&gt;
+      &lt;div id=&quot;countdownNum&quot; style=&quot;font-family:&amp;#x27;Martian Mono&amp;#x27;, var(--mono); font-size:140px; color:var(--accent2); letter-spacing:-4px; text-shadow: 0 0 60px rgba(240,78,116,.9), 0 0 120px rgba(240,78,116,.4); line-height:1; transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .3s ease;&quot;&gt;4&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div style=&quot;font-family:var(--mono); font-size:13px; color:var(--text-dim); letter-spacing:.2em;&quot;&gt;잠금 중...&lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&quot;countdownBlocker&quot;&gt;&lt;/div&gt;
+
+
+&lt;div id=&quot;dashboard&quot;&gt;
+  &lt;div class=&quot;dash-container&quot; style=&quot;padding-top:70px;&quot;&gt;
+
+  
+  &lt;div class=&quot;main-grid&quot;&gt;
+    &lt;div class=&quot;card&quot;&gt;
+      &lt;div class=&quot;card-label&quot;&gt;실패한 시도&lt;/div&gt;
+      &lt;div class=&quot;card-value red&quot; id=&quot;statFails&quot;&gt;0&lt;/div&gt;
+      &lt;div class=&quot;card-sub&quot;&gt;총 비밀번호 오류&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;
+      &lt;div class=&quot;card-label&quot;&gt;촬영된 사진&lt;/div&gt;
+      &lt;div class=&quot;card-value warn&quot; id=&quot;statPhotos&quot;&gt;0&lt;/div&gt;
+      &lt;div class=&quot;card-sub&quot;&gt;침입자 캡처&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;
+      &lt;div class=&quot;card-label&quot;&gt;경보 발생&lt;/div&gt;
+      &lt;div class=&quot;card-value blue&quot; id=&quot;statAlerts&quot;&gt;0&lt;/div&gt;
+      &lt;div class=&quot;card-sub&quot;&gt;총 보안 이벤트&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;div class=&quot;section-header&quot;&gt;카메라 / 침입자 감지&lt;/div&gt;
+    &lt;div class=&quot;camera-section&quot;&gt;
+      &lt;div class=&quot;camera-preview&quot;&gt;
+        &lt;video id=&quot;camVideo&quot; autoplay playsinline muted&gt;&lt;/video&gt;
+        &lt;div class=&quot;cam-overlay&quot; id=&quot;camOverlay&quot;&gt;카메라 비활성&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;camera-info&quot;&gt;
+        &lt;div class=&quot;camera-status&quot; id=&quot;camStatus&quot;&gt;🔴 카메라 꺼짐&lt;/div&gt;
+        &lt;div class=&quot;camera-hint&quot;&gt;잘못된 비밀번호 입력 시 자동으로 사진을 촬영합니다&lt;/div&gt;
+        &lt;div class=&quot;capture-count&quot;&gt;총 &lt;span id=&quot;captureCountSpan&quot;&gt;0&lt;/span&gt;장 촬영됨&lt;/div&gt;
+        &lt;div class=&quot;photos-grid&quot; id=&quot;photosGrid&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;div class=&quot;section-header&quot;&gt;위치 추적&lt;/div&gt;
+    &lt;div class=&quot;location-card&quot;&gt;
+      &lt;div class=&quot;location-icon&quot;&gt;📍&lt;/div&gt;
+      &lt;div class=&quot;location-info&quot;&gt;
+        &lt;div class=&quot;location-coords&quot; id=&quot;locationCoords&quot;&gt;위치 확인 중...&lt;/div&gt;
+        &lt;div class=&quot;location-detail&quot; id=&quot;locationDetail&quot;&gt;IP 기반 위치 추적 활성&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;button class=&quot;location-refresh&quot;&gt;↻ 갱신&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;div class=&quot;section-header&quot;&gt;로그 기록 설정&lt;/div&gt;
+    &lt;div class=&quot;toggle-grid&quot;&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;잠금 해제 / 잠금&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_access&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;보안 경보 발동&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_alert&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;침입자 사진 촬영&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_photo&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;비밀번호 오류 / 변경&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_pin&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;전원 연결 / 해제&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_power&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;네트워크 변경&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_network&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;화면 크기 변경&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_resize&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;브라우저 비활성&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_blur&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;브라우저 닫기 시도&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_close&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;GPS / IP 위치&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_location&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;시스템 이벤트&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_sys&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;&lt;div class=&quot;toggle-name&quot;&gt;설정 변경&lt;/div&gt;&lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;log_cfg&quot;&gt;&lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;div class=&quot;section-header&quot;&gt;비밀번호 변경&lt;/div&gt;
+    &lt;button class=&quot;pw-change-open-btn&quot;&gt;🔑 비밀번호 변경&lt;/button&gt;
+  &lt;/div&gt;
+
+  
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;div class=&quot;section-header&quot;&gt;보안 기능 설정&lt;/div&gt;
+    &lt;div class=&quot;toggle-grid&quot;&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;
+          &lt;div class=&quot;toggle-name&quot;&gt;비밀번호 오류 시 경보음&lt;/div&gt;
+          &lt;div class=&quot;toggle-desc&quot;&gt;틀릴 때마다 경고음 재생&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;tog_wrongpass&quot; checked&gt;
+          &lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;
+          &lt;div class=&quot;toggle-name&quot;&gt;침입자 사진 촬영&lt;/div&gt;
+          &lt;div class=&quot;toggle-desc&quot;&gt;오류 시 웹캠 자동 캡처&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;tog_capture&quot; checked&gt;
+          &lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;
+          &lt;div class=&quot;toggle-name&quot;&gt;전원 연결 변경 감지&lt;/div&gt;
+          &lt;div class=&quot;toggle-desc&quot;&gt;충전 연결/해제 시 경보&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;tog_power&quot; checked&gt;
+          &lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;
+          &lt;div class=&quot;toggle-name&quot;&gt;GPS 위치 추적&lt;/div&gt;
+          &lt;div class=&quot;toggle-desc&quot;&gt;정밀 GPS 위치 기록&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;tog_gps&quot; checked&gt;
+          &lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;
+          &lt;div class=&quot;toggle-name&quot;&gt;화면 크기 변경 감지&lt;/div&gt;
+          &lt;div class=&quot;toggle-desc&quot;&gt;브라우저 리사이즈 시 경보&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;tog_resize&quot;&gt;
+          &lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;
+          &lt;div class=&quot;toggle-name&quot;&gt;브라우저 최소화 감지&lt;/div&gt;
+          &lt;div class=&quot;toggle-desc&quot;&gt;창 숨김/비활성 시 경보&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;tog_blur&quot;&gt;
+          &lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;
+          &lt;div class=&quot;toggle-name&quot;&gt;브라우저 닫기 방지&lt;/div&gt;
+          &lt;div class=&quot;toggle-desc&quot;&gt;start-kiosk.sh 실행 시 탭 닫기 완전 차단&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;tog_close&quot; checked&gt;
+          &lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;toggle-item&quot;&gt;
+        &lt;div class=&quot;toggle-info&quot;&gt;
+          &lt;div class=&quot;toggle-name&quot;&gt;와이파이 변경 감지&lt;/div&gt;
+          &lt;div class=&quot;toggle-desc&quot;&gt;네트워크 상태 변경 시 알림&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;label class=&quot;toggle&quot;&gt;
+          &lt;input type=&quot;checkbox&quot; id=&quot;tog_network&quot; checked&gt;
+          &lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;div class=&quot;section-header&quot;&gt;보안 로그&lt;/div&gt;
+    &lt;div class=&quot;log-container&quot;&gt;
+      &lt;div class=&quot;log-header&quot;&gt;
+        &lt;span style=&quot;color:var(--accent);&quot;&gt;●&lt;/span&gt; LIVE LOG
+        &lt;span style=&quot;margin-left:auto;display:flex;gap:12px;align-items:center;&quot;&gt;
+        &lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;log-body&quot; id=&quot;logBody&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&quot;setupModal&quot;&gt;
+  &lt;div class=&quot;modal-box&quot;&gt;
+    &lt;div class=&quot;modal-title&quot;&gt;🔐 비밀번호 설정&lt;/div&gt;
+    &lt;div class=&quot;modal-sub&quot;&gt;6자리 숫자 PIN을 설정하세요&lt;/div&gt;
+    &lt;div class=&quot;modal-group&quot;&gt;
+      &lt;label&gt;새 비밀번호 (6자리)&lt;/label&gt;
+      &lt;input type=&quot;password&quot; id=&quot;newPin&quot; maxlength=&quot;6&quot; placeholder=&quot;• • • • • •&quot; inputmode=&quot;numeric&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;modal-group&quot;&gt;
+      &lt;label&gt;비밀번호 확인&lt;/label&gt;
+      &lt;input type=&quot;password&quot; id=&quot;confirmPin&quot; maxlength=&quot;6&quot; placeholder=&quot;• • • • • •&quot; inputmode=&quot;numeric&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;modal-btns&quot;&gt;
+      &lt;button class=&quot;modal-cancel&quot;&gt;취소&lt;/button&gt;
+      &lt;button class=&quot;modal-save&quot;&gt;저장&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&quot;closeGuard&quot;&gt;
+  &lt;div class=&quot;closeguard-box&quot;&gt;
+    &lt;div class=&quot;closeguard-icon&quot;&gt;🛑&lt;/div&gt;
+    &lt;div class=&quot;closeguard-title&quot;&gt;창 닫기 차단됨&lt;/div&gt;
+    &lt;div class=&quot;closeguard-sub&quot;&gt;비밀번호를 입력해야 닫을 수 있습니다&lt;/div&gt;
+    &lt;input type=&quot;password&quot; id=&quot;closeGuardInput&quot; maxlength=&quot;6&quot; placeholder=&quot;• • • • • •&quot; autocomplete=&quot;off&quot; inputmode=&quot;numeric&quot;&gt;
+    &lt;div class=&quot;closeguard-error&quot; id=&quot;closeGuardError&quot;&gt;&lt;/div&gt;
+    &lt;button class=&quot;closeguard-btn&quot;&gt;확인 후 닫기&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&quot;lightbox&quot;&gt;
+  &lt;img id=&quot;lightboxImg&quot; src=&quot;&quot; alt=&quot;캡처&quot;&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&quot;toast&quot;&gt;&lt;/div&gt;
+
+
+&lt;canvas id=&quot;captureCanvas&quot;&gt;&lt;/canvas&gt;
+
+
+
+&lt;div id=&quot;appFooter&quot; style=&quot;
+  position:fixed;
+  bottom:10px;
+  left:0;right:0;
+  text-align:center;
+  font-size:9px;
+  color:rgba(255,255,255,0.22);
+  font-family:monospace;
+  letter-spacing:0.03em;
+  pointer-events:none;
+  z-index:99999;
+  line-height:1.7;
+&quot;&gt;
+  MacGuard — Anti-Theft Protection System&lt;br&gt;
+  본 앱은 도난 억제를 보조하는 도구입니다. 100% 방지를 보장하지 않습니다.&lt;br&gt;
+  Copyright &amp;copy; 2026, Velvitty(연. Yeon.). All rights reserved. &amp;nbsp;|&amp;nbsp; X(전 트위터): &lt;a href=&quot;https://x.com/ThisIsYeony&quot; target=&quot;_blank&quot; style=&quot;color:rgba(255,255,255,0.3);text-decoration:none;pointer-events:auto;&quot;&gt;@ThisIsYeony&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</template>
+<!-- /Velvitty UI snapshot -->
 <script data-velvitty-launch>
 (() => {
   'use strict';
@@ -18,7 +1518,7 @@
   const source = document.currentScript.dataset.app;
   const host = document.createElement('velvitty-launch');
   const root = host.attachShadow({mode: 'open'});
-  root.innerHTML = "<style>:host{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;align-items:safe center;overflow:auto;box-sizing:border-box;padding:28px;background:var(--app-ui-background,#181818);color:#fff;font:16px/1.7 system-ui,-apple-system,\"Noto Sans KR\",sans-serif;text-align:center;isolation:isolate}\n*{box-sizing:border-box}.app-backdrop{position:fixed;inset:-5px;z-index:-2;width:calc(100% + 10px);height:calc(100% + 10px);border:0;pointer-events:none;opacity:.84;filter:none;background:transparent}.scene{position:fixed;inset:0;z-index:-1;background:transparent;backdrop-filter:blur(1.8px);-webkit-backdrop-filter:blur(1.8px);pointer-events:none}\n.glass{--lens-radius:32px;position:relative;isolation:isolate;width:min(620px,100%);padding:38px 42px 34px;border:1px solid #ffffff1a;border-radius:var(--lens-radius);background:rgb(var(--glass-rgb,255 255 255)/var(--glass-alpha,.075));backdrop-filter:blur(8.5px);-webkit-backdrop-filter:blur(8.5px);box-shadow:0 36px 88px -22px rgb(0 0 0/var(--glass-shadow-opacity,.34)),0 12px 32px -10px #0000002e,0 2px 8px -3px #0000001a,inset 0 1px 2px #ffffff30,inset 0 -1px 2px #ffffff12;pointer-events:none;filter:none;opacity:1}.lens-clip{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden;pointer-events:none}.lens-optics{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden;pointer-events:none;background:transparent;filter:none}.lens-copy{position:absolute;display:block;max-width:none;margin:0;padding:0;border:0;pointer-events:none;opacity:calc(1 - var(--glass-alpha,.075));background:transparent;filter:none}.glass:before{content:\"\";position:absolute;z-index:2;inset:0;padding:1px;border-radius:inherit;pointer-events:none;background:conic-gradient(from 142deg at 50% 50%,transparent 0deg,#ff9d7f88 9deg,#ffd17377 19deg,#a8edc777 29deg,#88dcff88 39deg,#aeb4ff88 49deg,#e0acff77 59deg,transparent 78deg,transparent 175deg,#e0acff66 190deg,#88dcff77 205deg,#a8edc766 217deg,#ffd17366 229deg,#ff9d7f66 241deg,transparent 260deg,transparent 360deg);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude}.glass:after{content:\"\";position:absolute;z-index:2;inset:-4px -3px -7px;border-radius:calc(var(--lens-radius) + 4px);border:1px solid #ffffff0d;box-shadow:inset 0 -2px 3px #ffffff0d;pointer-events:none}.brand{position:relative;z-index:3;margin:0 0 28px;color:#f4f4f4;font-size:13px;font-weight:500;letter-spacing:.04em;overflow-wrap:anywhere;text-shadow:0 1px 4px #0007}.symbol{position:relative;z-index:3;display:grid;place-items:center;width:72px;height:72px;margin:0 auto 26px;border:1px solid #ffffff35;border-radius:22px;background:linear-gradient(135deg,#ffffff14,#ffffff02);box-shadow:inset 0 1px 1px #ffffff70,inset 0 -2px 2px #ffffff20,0 3px 7px #0002;color:#fff}.symbol svg{width:32px;height:32px}.primary{position:relative;z-index:3;margin:0;font-size:clamp(18px,2.8vw,23px);line-height:1.75;font-weight:600;letter-spacing:-.04em;word-break:keep-all;overflow-wrap:anywhere;text-shadow:0 1px 5px #0008}.secondary{position:relative;z-index:3;margin:20px 0 29px;color:#f1f1f1;font-size:15px;line-height:1.75;word-break:keep-all;text-shadow:0 1px 4px #0007}.retry-note{position:relative;z-index:3;margin:27px 0 0;color:#e5e5e5;font-size:12px;line-height:1.8;word-break:keep-all;letter-spacing:-.02em;text-shadow:0 1px 3px #0006}.retry-surface{position:fixed;inset:0;z-index:5;width:100%;height:100%;margin:0;padding:0;border:0;background:transparent;cursor:pointer;outline:none}.retry-surface:focus-visible~.glass{outline:3px solid #fff;outline-offset:10px}\n@media(max-width:540px){:host{padding:20px}.glass{padding:28px 23px}.brand{margin-bottom:25px}.symbol{width:64px;height:64px;margin-bottom:23px}.secondary{font-size:14px;margin-top:17px;margin-bottom:25px}}\n\n.glass{--lens-ink:#fff;--lens-muted:#ededed}.glass[data-surface=\"light\"]{--lens-ink:#171717;--lens-muted:#444}.glass :is(.brand,.primary,.symbol){color:var(--lens-ink)}.glass :is(.secondary,.retry-note){color:var(--lens-muted)}.glass[data-surface=\"light\"] :is(.brand,.primary,.secondary,.retry-note){text-shadow:none}\n\n[hidden]{display:none!important}\n:host([data-page-visible]){background:transparent}\n.loading-meter{display:grid;grid-template-columns:1fr 3.5em;align-items:center;gap:12px;margin-top:26px}\nprogress{appearance:none;width:100%;height:7px;overflow:hidden;border:0;border-radius:999px;background:#ffffff24;color:#e7edf7}\nprogress::-webkit-progress-bar{background:transparent}\nprogress::-webkit-progress-value{border-radius:inherit;background:currentColor}\nprogress::-moz-progress-bar{border-radius:inherit;background:currentColor}\n.glass[data-surface=\"light\"] progress{background:#1b202222;color:#434b54}\n.percent{font-size:13px;font-variant-numeric:tabular-nums;color:var(--lens-muted);text-align:right}\n</style><iframe class=\"app-backdrop\" title=\"\" sandbox=\"allow-same-origin\" tabindex=\"-1\" inert aria-hidden=\"true\"></iframe>\n<div class=\"scene\" aria-hidden=\"true\"></div>\n<button class=\"retry-surface\" type=\"button\" aria-label=\"연결을 다시 시도하려면 화면을 아무 곳이나 누르세요.\" hidden></button>\n<main class=\"glass\">\n  <p class=\"primary\" role=\"status\">어플리케이션이 실행 중 입니다. 잠시만 기다려 주세요.</p>\n  <p class=\"secondary\" hidden>네트워크 환경을 확인해 주세요.</p>\n  <div class=\"loading-meter\"><progress aria-label=\"앱 실행 진행률\" max=\"100\" value=\"0\">0%</progress><span class=\"percent\" aria-hidden=\"true\">0%</span></div>\n  <p class=\"retry-note\" hidden>연결을 다시 시도하려면 화면을 아무 곳이나 누르세요.</p>\n</main>";
+  root.innerHTML = "<style>:host{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;align-items:safe center;overflow:auto;box-sizing:border-box;padding:28px;background:var(--app-ui-background,#181818);color:#fff;font:16px/1.7 system-ui,-apple-system,\"Noto Sans KR\",sans-serif;text-align:center;isolation:isolate}\n*{box-sizing:border-box}.app-backdrop{position:fixed;inset:-5px;z-index:0;width:calc(100% + 10px);height:calc(100% + 10px);border:0;pointer-events:none;opacity:.84;filter:none;background:transparent}.scene{position:fixed;inset:0;z-index:1;background:transparent;backdrop-filter:blur(1.8px);-webkit-backdrop-filter:blur(1.8px);pointer-events:none}\n.glass{--lens-radius:32px;position:relative;z-index:2;isolation:isolate;width:min(620px,100%);padding:38px 42px 34px;border:1px solid #ffffff1a;border-radius:var(--lens-radius);background:rgb(var(--glass-rgb,255 255 255)/var(--glass-alpha,.075));backdrop-filter:blur(8.5px);-webkit-backdrop-filter:blur(8.5px);box-shadow:0 36px 88px -22px rgb(0 0 0/var(--glass-shadow-opacity,.34)),0 12px 32px -10px #0000002e,0 2px 8px -3px #0000001a,inset 0 1px 2px #ffffff30,inset 0 -1px 2px #ffffff12;pointer-events:none;filter:none;opacity:1}.lens-clip{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden;pointer-events:none}.lens-optics{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden;pointer-events:none;background:transparent;filter:none}.lens-copy{position:absolute;display:block;max-width:none;margin:0;padding:0;border:0;pointer-events:none;opacity:calc(1 - var(--glass-alpha,.075));background:transparent;filter:none}.glass:before{content:\"\";position:absolute;z-index:2;inset:0;padding:1px;border-radius:inherit;pointer-events:none;background:conic-gradient(from 142deg at 50% 50%,transparent 0deg,#ff9d7f88 9deg,#ffd17377 19deg,#a8edc777 29deg,#88dcff88 39deg,#aeb4ff88 49deg,#e0acff77 59deg,transparent 78deg,transparent 175deg,#e0acff66 190deg,#88dcff77 205deg,#a8edc766 217deg,#ffd17366 229deg,#ff9d7f66 241deg,transparent 260deg,transparent 360deg);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude}.glass:after{content:\"\";position:absolute;z-index:2;inset:-4px -3px -7px;border-radius:calc(var(--lens-radius) + 4px);border:1px solid #ffffff0d;box-shadow:inset 0 -2px 3px #ffffff0d;pointer-events:none}.brand{position:relative;z-index:3;margin:0 0 28px;color:#f4f4f4;font-size:13px;font-weight:500;letter-spacing:.04em;overflow-wrap:anywhere;text-shadow:0 1px 4px #0007}.symbol{position:relative;z-index:3;display:grid;place-items:center;width:72px;height:72px;margin:0 auto 26px;border:1px solid #ffffff35;border-radius:22px;background:linear-gradient(135deg,#ffffff14,#ffffff02);box-shadow:inset 0 1px 1px #ffffff70,inset 0 -2px 2px #ffffff20,0 3px 7px #0002;color:#fff}.symbol svg{width:32px;height:32px}.primary{position:relative;z-index:3;margin:0;font-size:clamp(18px,2.8vw,23px);line-height:1.75;font-weight:600;letter-spacing:-.04em;word-break:keep-all;overflow-wrap:anywhere;text-shadow:0 1px 5px #0008}.secondary{position:relative;z-index:3;margin:20px 0 29px;color:#f1f1f1;font-size:15px;line-height:1.75;word-break:keep-all;text-shadow:0 1px 4px #0007}.retry-note{position:relative;z-index:3;margin:27px 0 0;color:#e5e5e5;font-size:12px;line-height:1.8;word-break:keep-all;letter-spacing:-.02em;text-shadow:0 1px 3px #0006}.retry-surface{position:fixed;inset:0;z-index:5;width:100%;height:100%;margin:0;padding:0;border:0;background:transparent;cursor:pointer;outline:none}.retry-surface:focus-visible~.glass{outline:3px solid #fff;outline-offset:10px}\n@media(max-width:540px){:host{padding:20px}.glass{padding:28px 23px}.brand{margin-bottom:25px}.symbol{width:64px;height:64px;margin-bottom:23px}.secondary{font-size:14px;margin-top:17px;margin-bottom:25px}}\n\n.glass{--lens-ink:#fff;--lens-muted:#ededed}.glass[data-surface=\"light\"]{--lens-ink:#171717;--lens-muted:#444}.glass :is(.brand,.primary,.symbol){color:var(--lens-ink)}.glass :is(.secondary,.retry-note){color:var(--lens-muted)}.glass[data-surface=\"light\"] :is(.brand,.primary,.secondary,.retry-note){text-shadow:none}\n\n[hidden]{display:none!important}\n:host([data-page-visible]){background:transparent}\n.loading-meter{display:grid;grid-template-columns:1fr 3.5em;align-items:center;gap:12px;margin-top:26px}\nprogress{appearance:none;width:100%;height:7px;overflow:hidden;border:0;border-radius:999px;background:#ffffff24;color:#e7edf7}\nprogress::-webkit-progress-bar{background:transparent}\nprogress::-webkit-progress-value{border-radius:inherit;background:currentColor}\nprogress::-moz-progress-bar{border-radius:inherit;background:currentColor}\n.glass[data-surface=\"light\"] progress{background:#1b202222;color:#434b54}\n.percent{font-size:13px;font-variant-numeric:tabular-nums;color:var(--lens-muted);text-align:right}\n</style><iframe class=\"app-backdrop\" title=\"\" sandbox=\"allow-same-origin\" tabindex=\"-1\" inert aria-hidden=\"true\"></iframe>\n<div class=\"scene\" aria-hidden=\"true\"></div>\n<button class=\"retry-surface\" type=\"button\" aria-label=\"연결을 다시 시도하려면 화면을 아무 곳이나 누르세요.\" hidden></button>\n<main class=\"glass\">\n  <p class=\"primary\" role=\"status\">어플리케이션이 실행 중 입니다. 잠시만 기다려 주세요.</p>\n  <p class=\"secondary\" hidden>네트워크 환경을 확인해 주세요.</p>\n  <div class=\"loading-meter\"><progress aria-label=\"앱 실행 진행률\" max=\"100\" value=\"0\">0%</progress><span class=\"percent\" aria-hidden=\"true\">0%</span></div>\n  <p class=\"retry-note\" hidden>연결을 다시 시도하려면 화면을 아무 곳이나 누르세요.</p>\n</main>";
   document.documentElement.append(host);
 
   const glass = root.querySelector('.glass');
@@ -30,6 +1530,8 @@
   const progress = root.querySelector('progress');
   const percent = root.querySelector('.percent');
   const backdrop = root.querySelector('.app-backdrop');
+  const fallback = document.getElementById('velvitty-ui-fallback');
+  if (fallback) backdrop.srcdoc = fallback.content.textContent;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let frame;
   let ready = false;
